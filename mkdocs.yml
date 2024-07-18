@@ -12,7 +12,7 @@ theme:
     scheme: slate
     primary: yellow
   font:
-    text: Inter
+    text: Noto Sans Display
     code: Ubuntu Mono
   features:
     - navigation.instant    
@@ -20,6 +20,9 @@ theme:
     - navigation.tabs
     - navigation.top
     - header.autohide
+  icon:
+    logo: fontawesome/solid/code-compare
+    favicon: fontawesome/solid/code-compare
 extra_css:
   - stylesheets/extra.css   
 
