@@ -2,9 +2,24 @@ site_name: Coding thoughts
 nav:
 - Home: index.md
 - Blog: blog/index.md
+- Links:
+  - General: gen-links.md
+  - Videos: yt-links.md
+  - Projects: gh-links.md
 
 plugins:
-  - blog
+  - blog   
+  - social:
+      cards_layout_options:
+        background_color: "#ffec3d"
+        logo: docs/images/simply_supported_beam.png
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true    
+  - thumbnails:
+      # optional styling for the thumbnail:
+      style: margin-top:5px;margin-bottom:5px;margin-right:25px;width:150pt;; 
 
 theme: 
   name: material
@@ -19,6 +34,7 @@ theme:
     - navigation.tracking
     - navigation.tabs
     - navigation.top
+    - navigation.tabs.sticky
     - header.autohide
   icon:
     logo: fontawesome/solid/code-compare
@@ -48,3 +64,14 @@ markdown_extensions:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - meta
+
+extra:
+  social:
+    - icon: fontawesome/brands/mastodon 
+      link: https://twitter.com/jonas_lindemann
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/jonas-lindemann-8632343/
+    - icon: fontawesome/brands/github
+      link: https://github.com/jonaslindemann
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@JonasLindemann
