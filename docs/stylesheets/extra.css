@@ -1,0 +1,18 @@
+/* Extra spacing between list items */
+
+
+/*
+body {
+    background-color: grey; 
+}
+*/
+
+.md-typeset ul, ol {
+    margin-top: 1em; /* Space before the list */
+    margin-bottom: 1em; /* Space after the list */
+    padding-left: 1.5em; /* Indent list items */
+}
+
+.md-typeset ul li, ol li {
+    margin-bottom: 0.0em; /* Space between list items */
+}

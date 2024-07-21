@@ -39,12 +39,13 @@ theme:
   icon:
     logo: fontawesome/solid/code-compare
     favicon: fontawesome/solid/code-compare
+
 extra_css:
   - stylesheets/extra.css   
 
-extra_javascript:
-  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
-  - javascripts/tablesort.js 
+#extra_javascript:
+#  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+#  - javascripts/tablesort.js 
 
 markdown_extensions:
   - markdown_include.include:
