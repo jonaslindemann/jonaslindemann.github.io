@@ -1,0 +1,197 @@
+---
+draft: false 
+date: 2024-09-09
+categories:
+  - CALFEM
+  - Python
+---
+
+# CALFEM for Python 3.6.10 released
+
+![ForcePAD Concept](images/python_packaging.png)
+
+CALFEM for Python is a comprehensive package designed for learning the finite element method. Originally developed in the 1980s using Fortran, CALFEM has since evolved to support MATLAB and Python. The Python version was specifically created to facilitate the course "Software Development for Technical Applications" at Structural Mechanics in Lund. Throughout the course, students gain hands-on experience in developing a complete finite element application in Python. They learn how to implement various components, including mesh generation, solver, user interface, and visualization routines.
+
+In this blog post, I will provide a detailed explanation of the packaging and installation process for CALFEM.
+
+<!-- more -->
+
+## Distributing and packaging CALFEM for Python
+
+The early versions of CALFEM for Python were distributed by placing all the Python source code files in a zip-archive and linking it on Structural Mechanics web pages. However, this approach proved to be cumbersome. In 2009, we transitioned to using Subversion as a source repository for better development tracking. In recent years, we have migrated all our development efforts to GitHub.
+
+Using a source repository allowed us to tag released versions and provide links to the latest version of CALFEM on our web pages. However, even with this improvement, the process of installing the package and setting the **PYTHONPATH** still required manual installation of all the dependencies. To address this issue, I modified the repository to create a package called **calfem-python** using **setuptools** in Python. This involved creating a special **setup.py** script in the source directory, which is used to generate the packages. The generated tar files are then uploaded to PyPI using specific commands.
+
+## Creating packages with PDM
+
+Releasing packages in the traditional way can be unnecessarily complicated. Fortunately, there are several packaging tools available that simplify the package creation process. One such tool is **PDM** (Python Package and Dependency Manager), which I recently discovered and found to be incredibly user-friendly.
+
+To utilize PDM, you'll need to make some modifications to your source tree. In the case of the **calfem-python** package, all source modules were initially located in the calfem directory within the source tree. However, PDM requires all source files to be placed under the **src** directory, as demonstrated below.
+
+```bash
+├───src
+│   └───calfem
+```
+
+To use **PDM** in your source tree you run **pdm init** the first time. This will ask you a number of questions and generate a **pyproject.toml** file. The **pyproject.toml** file of the **calfem-python** is shown below:
+
+First we define the main project attributes such as package-name and version.
+
+```toml
+[project]
+name = "calfem-python"
+version = "3.6.10"
+description = "CALFEM for Python"
+authors = [
+    {name = "Jonas Lindemann", email = "jonas.lindemann@lunarc.lu.se"},
+    {name = "Jonas Lindemann", email = "jonas.lindemann@gmail.com"},
+]
+```
+
+Next we need to specify the hard dependencies of the package:
+
+```toml
+dependencies = [
+    "gmsh",
+    "matplotlib",
+    "numpy",
+    "scipy",
+    "tabulate",
+]
+
+requires-python = ">=3.8"
+```
+
+In the following part we specify some package metadata such as README files, license type and keywords.
+
+```toml
+readme = "README.md"
+license = {text = "MIT"}
+keywords = [
+    "finite element",
+    "math",
+    "numerics",
+]
+```
+
+In the classifiers section we give some additional project metadata.
+
+```toml
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Build Tools",
+]
+```
+
+We can also provide a linke to a project home page.
+
+```toml
+[project.urls]
+Homepage = "https://github.com/CALFEM/calfem-python"
+```
+
+The **pyproject.toml** file is a standardised build file used by many build systems. To specify that this package requires PDM we specify this in the **build-system** secion.
+
+```toml
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+```
+
+Finally we list any optional dependencies.
+
+```toml
+[project.optional-dependencies]
+visvis = [ "visvis" ]
+vedo = [ "vedo" ]
+pyvtk = [ "pyvtk" ]
+qtpy = [ "qtpy" ]
+```
+
+## Creating the package
+
+Dependencies are installed from a so called lock-file. The lock file is generated by PDM to define the absolute truth on which dependency packages to use. There are several commands to manage the lock-file. The most common in the **pdm install** command. This will determine required dependencies and update the lock-file.
+
+```cmd
+C:\> pdm update
+DEPRECATED: `cross_platform` strategy is deprecated in favor of the new lock targets.
+See docs: http://pdm-project.org/en/latest/usage/lock-targets/
+C:\Users\jonas\miniconda3\envs\calfem-dev-3.12\Lib\site-packages\pdm\resolver\providers.py:200: PackageWarning: Skipping
+matplotlib@3.9.2 because it requires Python>=3.9 but the lock targets to work with Python>=3.8. Instead, another version
+of matplotlib that supports Python>=3.8 will be used.
+...
+⠼ 0:00:04 Resolve for environment (>=3.8) 17 resolved, 0 to resolveINFO: Use `-q/--quiet` to suppress these warnings, or ignore them per-package with `ignore_package_warnings` config in
+[tool.pdm] table.
+  0:00:06 🔒 Lock successful.
+Synchronizing working set with resolved packages: 0 to add, 2 to update, 0 to remove
+
+  ✔ Update matplotlib 3.7.4 -> 3.7.5 successful
+  ✔ Update gmsh 4.12.2 -> 4.13.1 successful
+  ✔ Update calfem-python 3.6.10 -> 3.6.10 successful
+
+  0:00:03 🎉 All complete! 2/2
+
+C:\> pdm install
+All packages are synced to date, nothing to do.
+  ✔ Update calfem-python 3.6.10 -> 3.6.10 successful
+
+  0:00:00 🎉 All complete! 0/0
+```
+
+## Building the package
+
+To build the package files we use the **pdm build** command.
+
+```cmd
+pdm build
+Building sdist...
+Built sdist at D:/Users/Jonas/Development/calfem-python/dist\calfem_python-3.6.10.tar.gz
+Building wheel from sdist...
+Built wheel at D:/Users/Jonas/Development/calfem-python/dist\calfem_python-3.6.10-py3-none-any.whl
+```
+
+This will build a source distribution **calfem_python-3.6.10.tar.gz** in the **dist** directory and a prebuilt module or Wheel, **calfem_python-3.6.10-py3-none-any.whl**, also in the **dist** directory.
+
+## Publishing the package
+
+When you have tested your package it is time to publish it in PyPI. This is done with the **pdm publish** command. This will upload the previously build distribution files.
+
+## Installing CALFEM for Python
+
+To get the best environment for CALFEM we used the **conda-forge** Python distribution. First we create a conda environment for CALFEM.
+
+```cmd
+(base) C:\> conda create -n calfem-env-3.12 python=3.12 numpy scipy matplotlib qtpy pyqt tabulate
+```
+
+This will install optimised versions of numpy and scipy. Next we activate our environment:
+
+```cmd
+(base) C:\> conda activate calfem-env-3.12
+(calfem-env-3.12) C:\> 
+```
+
+Now we are ready to install the published **calfem-python** package using **pip**.
+
+```cmd
+(calfem-env-3.12) C:\> pip install calfem-python
+```
+
+Now we have a working CALFEM for Python environment for all of our finite element needs.
+
+
+
+
+
