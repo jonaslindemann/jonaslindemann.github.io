@@ -19,6 +19,7 @@ plugins:
   - thumbnails:
       # optional styling for the thumbnail:
       style: margin-top:5px;margin-bottom:5px;margin-right:25px;width:150pt;; 
+  - material-plausible
 
 theme: 
   name: material
@@ -72,3 +73,6 @@ extra:
       link: https://github.com/jonaslindemann
     - icon: fontawesome/brands/youtube
       link: https://www.youtube.com/@JonasLindemann
+  analytics:
+    provider: plausible
+    domain: jonaslindemann.github.io
