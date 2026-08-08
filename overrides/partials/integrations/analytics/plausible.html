@@ -1,0 +1,4 @@
+{# Plausible analytics integration. #}
+{% if config.extra.analytics.domain %}
+  <script defer data-domain="{{ config.extra.analytics.domain }}" src="https://plausible.io/js/script.js"></script>
+{% endif %}

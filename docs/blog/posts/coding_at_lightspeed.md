@@ -39,15 +39,15 @@ The answer I got gave an overview of the different methods of implementing selec
 
     Ray Casting with Bounding Volumes:
 
-    [ description of the method and code examples ]
+    \[ description of the method and code examples \]
 
     Color Picking:
 
-    [ description of the method and code examples ]
+    \[ description of the method and code examples \]
 
     GPU picking using Compute shaders
 
-    [ description of the method and code examples ]
+    \[ description of the method and code examples \]
 
 
 Every approach was provided with a code example. I decided to go with the color picking approach. Then I asked the follow up question:
@@ -62,19 +62,19 @@ It then answered:
 
     I'll help you implement color buffer selection, which is indeed a straightforward approach. Here's a complete implementation:
 
-    [ Implementing a color buffer in C++/OpenGL ] 
+    \[ Implementing a color buffer in C++/OpenGL \]
 
     Vertex shader:
 
-    [ GLSL verted shader ]
+    \[ GLSL verted shader \]
 
     Fragment shader:
 
-    [ GLSL fragment shader ]
+    \[ GLSL fragment shader \]
 
     Integration of the shaders in the rendering pipeline:
 
-    [ C++ code implementing in scene graph ]
+    \[ C++ code implementing in scene graph \]
 
 The suggested shaders were a bit different from the shaders I hade implemented in Ivf++, so I asked Claude to help me modify them to fit my implementation. 
 
@@ -334,7 +334,7 @@ I got a very detailed answer with the basic approach and code examples.
     2. Create a full-screen quad to render the final result
     3. Apply post-processing shaders using the scene texture as input
 
-    [ Example code ]
+    \[ Example code \]
 
 Claude also provided hints and code on implementing a ping-pong buffer for the post-processing effects. This would have been a real pain to implement by reading documentation and tutorials. 
 
