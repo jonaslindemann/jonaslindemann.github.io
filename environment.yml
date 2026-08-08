@@ -1,0 +1,9 @@
+name: zensical-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - zensical
+  - pip
+  - pip:
+      - -r requirements.txt
