@@ -1,0 +1,1097 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Development notes about C++, Python, Fortran, HPC, mechanics, and graphics.">
+      
+      
+        <meta name="author" content="Jonas Lindemann">
+      
+      
+        <link rel="canonical" href="https://jonaslindemann.github.io/blog/posts/ai_and_mechanics/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.53">
+    
+    
+      
+        <title>Experimenting with AI and Mechanics applications - Coding thoughts</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/classic/main.39e53929.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/classic/palette.7dc9a0ad.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Display:300,300i,400,400i,500,500i,700,700i%7CUbuntu+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Noto Sans Display";--md-code-font:"Ubuntu Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+  
+
+
+  
+
+  <script defer data-domain="jonaslindemann.github.io" src="https://plausible.io/js/script.js"></script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#experimenting-with-ai-and-mechanics-applications" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Coding thoughts" class="md-header__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Coding thoughts
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Experimenting with AI and Mechanics applications
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../gen-links/" class="md-tabs__link">
+          
+  
+  Links
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Coding thoughts" class="md-nav__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    Coding thoughts
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Blog
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Links
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Links
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gen-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  General
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yt-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Videos
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gh-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Projects
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#first-conversations-with-claude" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        First conversations with Claude
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-the-ai-interface-in-objectiveframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Implementing the AI interface in ObjectiveFrame
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-structure-generation-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A Structure Generation Class
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-a-gui-for-the-ai-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Implementing a GUI for the AI agent
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-the-ui-in-objectiveframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Implementing the UI in ObjectiveFrame
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Conclusion
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Links
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<h1 id="experimenting-with-ai-and-mechanics-applications">Experimenting with AI and Mechanics applications</h1>
+<p><img alt="" src="../images/ai_and_mechanics.png" /></p>
+<p>When working on the next version of ObjectiveFrame with improved scripting features, I got the idea to explore how well an AI agent would create a mechanical structure using the built-in scripting language (ChaiScript) in ObjectiveFrame. I had some initial sessions with Claude which confirmed that it was possible to create scripts from textual prompts and run them in the ObjectiveFrame's new scripting environment. This led me to my next idea of adding an interface to an AI agent directly in the ObjectiveFrame application. The AI agent would then be able to create mechanical structures based on the user's prompt. In the following sections, I will describe my process to implement this feature.</p>
+<!-- more -->
+
+<h2 id="first-conversations-with-claude">First conversations with Claude</h2>
+<p>To test my idea of generating structures from prompts, I provided Claude with the following prompt:</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>I have an 3D beam/bar analysis application that provide the following functions for creating geometry (implemented in chaiscript):</p>
+<div class="highlight"><pre><span></span><code>vfem::Node *addNode(double x, double y, double z);
+vfem::Beam *addBeam(int i0, int i1);
+size_t nodeCount();
+void nodePos(vfem::Node *node, double &amp;x, double &amp;y, double &amp;z);
+void nodePosAt(int i, double &amp;x, double &amp;y, double &amp;z);
+void updateNodePos(vfem::Node *node, double x, double y, double z);
+void updateNodePosAt(int i, double x, double y, double z);
+vfem::Node *nodeAt(int i);
+bool isNodeSelected(vfem::Node *node);
+bool isNodeSelectedAt(int i);
+double randFloat(double min, double max);
+int randInt(int min, int max);
+void randSeed();
+</code></pre></div>
+<p>Using this information can you create a chaiscript from the following prompt:</p>
+<p>Create a beam structure for a building 10 x 10 m with a angled roof. Add stabilisation structures as well.</p>
+</div>
+<p>In the prompt, I described my scripting interface and its functions. I also told Claude that I was using the scripting language Chaiscript. I then asked Claude to generate a script to create a beam structure for a building with a 10 x 10 m base and an angled roof. I also asked Claude to add stabilization structures to the building. The response I got was the following:</p>
+<div class="admonition answer">
+<p class="admonition-title">Answer</p>
+<p>I'll create a ChaiScript that generates a beam structure for a 10m x 10m building with an angled roof and stabilization structures.Building Structure with Angled Roof and StabilizationClick to open codeTap to openThe script I've created generates a 10m x 10m building with an angled roof and comprehensive stabilization structures. Here's how it works:</p>
+<p>Building Dimensions:</p>
+<p>10m x 10m footprint
+4m wall height
+6m peak roof height (2m above the walls)</p>
+<p>Main Structure:</p>
+<p>Creates a rectangular base with four corner columns
+Forms a simple gable roof with a central ridge beam
+Includes top wall beams connecting the columns</p>
+<p>Stabilization Elements:</p>
+<p>X-bracing on all four walls for lateral stability
+Additional midpoint supports along each wall
+Ridge beam with supporting connections to all walls
+Purlins (horizontal roof supports) to reinforce the roof structure</p>
+<p>Node Arrangement:</p>
+<p>Ground corners are placed in a counter-clockwise pattern
+Wall tops align with the ground corners
+Roof peak forms along a central ridge line</p>
+<p>The script uses your provided ChaiScript functions to create nodes at specific coordinates and connect them with beams. It includes helper functions to simplify node creation and tracking.
+Would you like me to modify any aspects of this building structure? For example, I could adjust the roof angle, add more stabilization elements, or change the building proportions.</p>
+</div>
+<p>To my big surprise, Claude actually generated a script that ran directly in ObjectiveFrame and created a beam structure for a building with a 10 x 10 m base and an angled roof. The script also added stabilization structures to the building. The code was well structured and used convenience functions to simplify the creation of nodes and beams. Some of the code is shown below:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Building Structure Generator</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// Creates a 10m x 10m building with angled roof and stabilization elements</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// Define building dimensions</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">var</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">var</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10.0</span><span class="p">;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">var</span><span class="w"> </span><span class="n">wallHeight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.0</span><span class="p">;</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">var</span><span class="w"> </span><span class="n">roofPeakHeight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6.0</span><span class="p">;</span><span class="w">  </span><span class="c1">// Peak of the roof is 2m above the wall tops</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">// Function to create node and return its index</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">def</span><span class="w"> </span><span class="nf">createNodeAndGetIndex</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">addNode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">nodeCount</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  </span><span class="c1">// Return the index of the newly created node</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1">// Create building nodes - ground floor corners (counter-clockwise from origin)</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="n">print</span><span class="p">(</span><span class="s">&quot;Creating building structure...&quot;</span><span class="p">);</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1">// Ground floor corners</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">var</span><span class="w"> </span><span class="n">n0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span><span class="w">         </span><span class="c1">// Front left</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">var</span><span class="w"> </span><span class="n">n1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span><span class="w">       </span><span class="c1">// Front right</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="n">var</span><span class="w"> </span><span class="n">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span><span class="w">    </span><span class="c1">// Back right</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="n">var</span><span class="w"> </span><span class="n">n3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span><span class="w">      </span><span class="c1">// Back left</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="c1">// Top of walls (directly above ground floor corners)</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="n">var</span><span class="w"> </span><span class="n">n4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">wallHeight</span><span class="p">);</span><span class="w">         </span><span class="c1">// Front left top</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="n">var</span><span class="w"> </span><span class="n">n5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">wallHeight</span><span class="p">);</span><span class="w">       </span><span class="c1">// Front right top</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="n">var</span><span class="w"> </span><span class="n">n6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">wallHeight</span><span class="p">);</span><span class="w">    </span><span class="c1">// Back right top</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="n">var</span><span class="w"> </span><span class="n">n7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">wallHeight</span><span class="p">);</span><span class="w">      </span><span class="c1">// Back left top</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="c1">// Roof peak nodes</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="n">var</span><span class="w"> </span><span class="n">n8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">roofPeakHeight</span><span class="p">);</span><span class="w">     </span><span class="c1">// Front center peak</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="n">var</span><span class="w"> </span><span class="n">n9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">roofPeakHeight</span><span class="p">);</span><span class="w">  </span><span class="c1">// Back center peak</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="c1">// Create center ridge beam</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="n">var</span><span class="w"> </span><span class="n">ridge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">createNodeAndGetIndex</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">roofPeakHeight</span><span class="p">);</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="c1">// Create vertical beams (columns)</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="n">print</span><span class="p">(</span><span class="s">&quot;Creating columns...&quot;</span><span class="p">);</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n0</span><span class="p">,</span><span class="w"> </span><span class="n">n4</span><span class="p">);</span><span class="w">  </span><span class="c1">// Front left column</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span><span class="w"> </span><span class="n">n5</span><span class="p">);</span><span class="w">  </span><span class="c1">// Front right column</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span><span class="w"> </span><span class="n">n6</span><span class="p">);</span><span class="w">  </span><span class="c1">// Back right column</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n3</span><span class="p">,</span><span class="w"> </span><span class="n">n7</span><span class="p">);</span><span class="w">  </span><span class="c1">// Back left column</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="c1">// Create ground floor beams</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="n">print</span><span class="p">(</span><span class="s">&quot;Creating ground floor frame...&quot;</span><span class="p">);</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n0</span><span class="p">,</span><span class="w"> </span><span class="n">n1</span><span class="p">);</span><span class="w">  </span><span class="c1">// Front ground beam</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span><span class="w"> </span><span class="n">n2</span><span class="p">);</span><span class="w">  </span><span class="c1">// Right ground beam</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span><span class="w"> </span><span class="n">n3</span><span class="p">);</span><span class="w">  </span><span class="c1">// Back ground beam</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="n">addBeam</span><span class="p">(</span><span class="n">n3</span><span class="p">,</span><span class="w"> </span><span class="n">n0</span><span class="p">);</span><span class="w">  </span><span class="c1">// Left ground beam</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="c1">// ... more code ...</span>
+</code></pre></div>
+<p>Running the code in ObjectiveFrame created the following structure:</p>
+<p><img alt="" src="../images/ai_objframe_01.png" /></p>
+<p>Obviously, the structure was created in the XY plane, but the ground plane in ObjectiveFrame is the XZ plane. I told Claude I wanted the structure to be created in the XZ plane instead. Claude then generated a new script that created the structure in the XZ plane. The code was similar to the previous one but with the coordinates adjusted to the XZ plane. This short experiment showed that it was possible to generate scripts from textual prompts and run them in the ObjectiveFrame application. Perhaps it would be possible to integrate this directly into the application?</p>
+<h2 id="implementing-the-ai-interface-in-objectiveframe">Implementing the AI interface in ObjectiveFrame</h2>
+<p>To implement structure generation using AI, I need to make sure that the prompt only generates Chaiscript code and no other additional information. To accomplish this, I decided to implement the system prompt with a set of rules that the AI agent must follow, followed by the actual prompt from the user. After some testing, the rules that seemed to generate the best results were:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>You are a structural engineering assistant specialized in generating optimized ChaiScript code for 3D beam/bar structures.
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Your task is to convert natural language descriptions into optimized ChaiScript code.
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>The code you generate should follow these guidelines:
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">1.</span> COORDINATE SYSTEM:
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>XZ is the ground plane, Y is height
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Origin (0,0,0) is at center of structure base unless specified otherwise
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>All dimensions are in meters
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Try centering the structure around the origin
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="k">2.</span> OPTIMIZATION PRINCIPLES:
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Minimize redundant elements
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Each node must serve a structural purpose
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Create triangulated structures where possible
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Avoid duplicate beams and unnecessary nodes
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="k">3.</span> STRUCTURE GENERATION:
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Generate nodes only at essential structural points
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Connect beams in minimal paths that ensure structural integrity
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Use functions to create repeating patterns rather than hardcoding elements
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="k">4.</span> AVAILABLE FUNCTIONS:
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void addNode(double x, double y, double z);
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void addBeam(int i0, int i1);
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>size_t addNodeWithIdx(double x, double y, double z);
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>size_t addBeamWithIdx(int i0, int i1);
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>size_t nodeCount();
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>size_t beamCount();
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void nodePosAt(int i, double &amp;x, double &amp;y, double &amp;z);
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void updateNodePosAt(int i, double x, double y, double z);
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void beamAt(int i, int &amp;i0, int &amp;i1);
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void updateBeamAt(int i, int i0, int i1);
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>bool isNodeSelectedAt(int i);
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>double randFloat(double min, double max);
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>int randInt(int min, int max);
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void randSeed();
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>bool isNodeSelectedAt(int i);
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void selectAllElements();
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void selectAllNodes();
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void meshSelectedNodes();
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>void surfaceSelectedNodes(bool groundElements = true);
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>newModel();
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="k">5.</span> APPLICATION INFORMATION
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Nodes are created consequentially, starting from 0. 
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Beams are created by specifying the indices of the nodes they connect. 0 based.
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Node indices start from 0 and increase by 1 for each new node.
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Start models with newModel() to clear the workspace.
+<a id="__codelineno-1-51" name="__codelineno-1-51" href="#__codelineno-1-51"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Assume node ordering is invalid after meshSelectedNodes() or surfaceSelectedNodes().
+<a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>
+<a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a><span class="k">6.</span> CHAISCRIPT TYPES:
+<a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>Vectors and Maps are used in the following way:
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>        var v = [1,2,3u,4ll,&quot;16&quot;, <span class="sb">`+`</span>]; // creates vector of heterogenous values
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>        var m = [&quot;a&quot;:1, &quot;b&quot;:2]; // map of string:value pairs
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>        // Add a value to the vector by value.
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>        v.push_back(123);
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>        // Add an object to the vector by reference.
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>        v.push_back_ref(m);
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>Declare variables required in functions with the global keyword instead of var.
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>Functions are defined using the def keyword.
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>The PI constant is not defined in ChaiScript, so you can define it as a global variable using the global keyword.
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>All declared variables must be initialized with a value.
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a><span class="w">    </span><span class="k">-</span><span class="w"> </span>When using integer divisions in floating point arithmetic, cast the numerator to a floating point number.
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>
+<a id="__codelineno-1-71" name="__codelineno-1-71" href="#__codelineno-1-71"></a><span class="k">7.</span> OTHER CONSIDERATIONS:
+<a id="__codelineno-1-72" name="__codelineno-1-72" href="#__codelineno-1-72"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Avoid calling methods on vfem::Node or vfem::Beam objects directly. Use the provided functions instead.
+<a id="__codelineno-1-73" name="__codelineno-1-73" href="#__codelineno-1-73"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>No need to store generated nodes in separate data structures. Generate them as needed.
+<a id="__codelineno-1-74" name="__codelineno-1-74" href="#__codelineno-1-74"></a><span class="w">   </span><span class="k">-</span><span class="w"> </span>Provide only ChaiScript code with minimal comments explaining the structure. Do not include explanations outside the code.
+</code></pre></div>
+<p>As you can see, I give some initial ground rules on how I want the structure generated, followed by the available functions in ChaiScript. When experimenting with the system prompt, I also realized that the AI agent needed guidance on how to declare certain variables in the ChaiScript code. I, therefore, added a section on the specifics of the ChaiScript language. In the following section, I will go through how I implemented the AI agent in ObjectiveFrame.</p>
+<h2 id="a-structure-generation-class">A Structure Generation Class</h2>
+<p>To implement the AI agent in ObjectiveFrame, I created a new class called <code>StructureGenerator</code>. The class is responsible for generating ChaiScript code from a user prompt. The class has the following structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cm">/**</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cm"> * A class that interfaces with the Claude API to generate optimized ChaiScript code</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="cm"> * for structural modeling based on natural language prompts.</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="cm"> */</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">StructureGenerator</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="c1">// Define a callback type for asynchronous operations</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">GenerationCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">private</span><span class="o">:</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">m_apiKey</span><span class="p">;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">m_apiUrl</span><span class="p">;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">m_model</span><span class="p">;</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">m_systemPrompt</span><span class="p">;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">WriteCallback</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">contents</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">nmemb</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">*</span><span class="n">output</span><span class="p">);</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">buildSystemPrompt</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">makeClaudeRequest</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">userPrompt</span><span class="p">);</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">extractChaiScript</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">claudeResponse</span><span class="p">);</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="n">StructureGenerator</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apiKey</span><span class="p">);</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">    </span><span class="o">~</span><span class="n">StructureGenerator</span><span class="p">();</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setModel</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">modelName</span><span class="p">);</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setApiKey</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apiKey</span><span class="p">);</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">loadSystemPromptFrom</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">filename</span><span class="p">);</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">generateStructure</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">prompt</span><span class="p">);</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">generateStructureAsync</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">prompt</span><span class="p">,</span><span class="w"> </span><span class="n">GenerationCallback</span><span class="w"> </span><span class="n">callback</span><span class="p">);</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">generateStructureAsync</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">prompt</span><span class="p">);</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="p">};</span>
+</code></pre></div>
+<p>I am using the Claude API as the backend AI agent for this application. Accessing the Claude API requires an API key, which can be acquired from Anthropic's console service. The user must provide their API key to use ObjectiveFrame with the Claude API.</p>
+<p>Using the class can be done either blocking or non-blocking. The easiest way is to use the blocking call as shown in the code below:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// Initialize the generator with your API key</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">StructureGenerator</span><span class="w"> </span><span class="n">generator</span><span class="p">(</span><span class="s">&quot;your-api-key-here&quot;</span><span class="p">);</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">// Generate ChaiScript code for a structure</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">chaiScript</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">generator</span><span class="p">.</span><span class="n">generateStructure</span><span class="p">(</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="s">&quot;Create a building structure 10m × 10m with 4m wall height and an angled roof peaking at 6m. &quot;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="s">&quot;Add stabilization with single diagonals on each wall and direct roof supports.&quot;</span><span class="p">);</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1">// Print or use the generated code</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">chaiScript</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</code></pre></div>
+<p>This produces the following output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>// Building structure 10m ├ù 10m with 4m wall height and angled roof peaking at 6m
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>newModel();
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>// Define building dimensions
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>global building_width = 10.0;
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>global building_depth = 10.0;
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>global wall_height = 4.0;
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>global peak_height = 6.0;
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>// Create base nodes (corners at ground level)
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>global n0 = addNodeWithIdx(-building_width/2, 0, -building_depth/2); // front left
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>global n1 = addNodeWithIdx( building_width/2, 0, -building_depth/2); // front right
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>global n2 = addNodeWithIdx( building_width/2, 0,  building_depth/2); // back right
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>global n3 = addNodeWithIdx(-building_width/2, 0,  building_depth/2); // back left
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>// Create wall top nodes
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>global n4 = addNodeWithIdx(-building_width/2, wall_height, -building_depth/2); // front left top
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>global n5 = addNodeWithIdx( building_width/2, wall_height, -building_depth/2); // front right top
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>global n6 = addNodeWithIdx( building_width/2, wall_height,  building_depth/2); // back right top
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>global n7 = addNodeWithIdx(-building_width/2, wall_height,  building_depth/2); // back left top
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>// Create roof peak nodes (in the middle of the building)
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>global n8 = addNodeWithIdx(0, peak_height, -building_depth/2); // front peak
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>global n9 = addNodeWithIdx(0, peak_height,  building_depth/2); // back peak
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>// Base frame
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>addBeam(n0, n1); // front base
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>addBeam(n1, n2); // right base
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>addBeam(n2, n3); // back base
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a>addBeam(n3, n0); // left base
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a>// Vertical columns
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>addBeam(n0, n4); // front left column
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a>addBeam(n1, n5); // front right column
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a>addBeam(n2, n6); // back right column
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>addBeam(n3, n7); // back left column
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>// Wall top frame
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a>addBeam(n4, n5); // front top
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a>addBeam(n5, n6); // right top
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a>addBeam(n6, n7); // back top
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a>addBeam(n7, n4); // left top
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a>
+<a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a>// Roof structure
+<a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a>addBeam(n4, n8); // front left to front peak
+<a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a>addBeam(n5, n8); // front right to front peak
+<a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a>addBeam(n7, n9); // back left to back peak
+<a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a>addBeam(n6, n9); // back right to back peak
+<a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a>addBeam(n8, n9); // peak connection beam
+<a id="__codelineno-4-50" name="__codelineno-4-50" href="#__codelineno-4-50"></a>
+<a id="__codelineno-4-51" name="__codelineno-4-51" href="#__codelineno-4-51"></a>// Wall diagonals for stabilization
+<a id="__codelineno-4-52" name="__codelineno-4-52" href="#__codelineno-4-52"></a>addBeam(n0, n5); // front wall diagonal
+<a id="__codelineno-4-53" name="__codelineno-4-53" href="#__codelineno-4-53"></a>addBeam(n1, n6); // right wall diagonal
+<a id="__codelineno-4-54" name="__codelineno-4-54" href="#__codelineno-4-54"></a>addBeam(n2, n7); // back wall diagonal
+<a id="__codelineno-4-55" name="__codelineno-4-55" href="#__codelineno-4-55"></a>addBeam(n3, n4); // left wall diagonal
+<a id="__codelineno-4-56" name="__codelineno-4-56" href="#__codelineno-4-56"></a>
+<a id="__codelineno-4-57" name="__codelineno-4-57" href="#__codelineno-4-57"></a>// Direct roof supports
+<a id="__codelineno-4-58" name="__codelineno-4-58" href="#__codelineno-4-58"></a>addBeam(n4, n6); // diagonal cross brace 1
+<a id="__codelineno-4-59" name="__codelineno-4-59" href="#__codelineno-4-59"></a>addBeam(n5, n7); // diagonal cross brace 2
+</code></pre></div>
+<p>This operation is relatively long-running and ObjectiveFrame is an immediate rendering model application, so we can't have a blocking call in the rendering loop. Therefore, I also implemented an asynchronous version of the function that can be used in the rendering loop. This method takes a callback function as an argument and calls this function when structure generation has completed. This allows for it to be integrated into the rendering loop. The code below shows how the generation is integrated as a method in the <strong>FemView</strong> class of ObjectiveFrame:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">FemViewWindow::makeAiRequest</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">userPrompt</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_aiApiKey</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="n">log</span><span class="p">(</span><span class="s">&quot;No API key set for AI service.&quot;</span><span class="p">);</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="n">m_structureGenerator</span><span class="p">.</span><span class="n">setApiKey</span><span class="p">(</span><span class="n">m_aiApiKey</span><span class="p">);</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="n">m_structureGenerator</span><span class="p">.</span><span class="n">generateStructureAsync</span><span class="p">(</span><span class="n">userPrompt</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">FemViewWindow</span><span class="o">::</span><span class="n">onGenerationComplete</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">,</span><span class="w">                                        </span><span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_2</span><span class="p">));</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="n">m_isProcessingAiRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="p">}</span>
+</code></pre></div>
+<p>The internal implementation of the <strong>StructureGenerator</strong> class is based on the <strong>cURL</strong> library and the <strong>nlohmann/json</strong> library for calling the Claude API and processing the response. </p>
+<h2 id="implementing-a-gui-for-the-ai-agent">Implementing a GUI for the AI agent</h2>
+<p>The main idea for the user interface is to extend the <strong>Create</strong> menu in ObjectiveFrame with a <strong>Create using AI</strong> item. This option will display a prompt window where the user can enter the prompt and request a structure. The window is divided into 2 sections: the first is the prompt text field, and the second displays the generated code. This lets the user copy the code to the script editor for further modifications. The prompt window is shown below:</p>
+<p><img alt="" src="../images/ai_objframe_02.png" /></p>
+<p>The user interface has 5 controls:</p>
+<ul>
+<li><strong>Clear prompt</strong>: Clears the prompt text field.</li>
+<li><strong>Clear model</strong>: Clears the model in the rendering window.</li>
+<li><strong>Generate</strong>: Generates the structure based on the prompt.</li>
+<li><strong>Auto run</strong>: When checked will automatically run the generated code (default). </li>
+<li><strong>Run</strong>: Runs the code in the response window.</li>
+</ul>
+<p>The check box was added to allow the user to decide whether the generated code should be run automatically or not. This is useful if the user wants to modify the code before running it. </p>
+<p>When the user selects generate, the user interface shows a progress bar, and the prompt text field is hidden, as shown below:</p>
+<p><img alt="" src="../images/ai_objframe_03.png" /></p>
+<p>When the generation is complete the response window is shown with the generated code as in the following image:</p>
+<p><img alt="" src="../images/ai_objframe_04.png" /></p>
+<p>The generation is usually successful, but sometimes, the AI agent generates strange structures from the prompt. Most of the time, it is enough for the user to run the prompt again. Error messages from code generation are shown in the ObjectiveFrame log window.</p>
+<h2 id="implementing-the-ui-in-objectiveframe">Implementing the UI in ObjectiveFrame</h2>
+<p>The user interface is implemented in two parts. The first part is the <strong>ofui::PromptWindow</strong> class, which renders the prompt window and its controls using ImGui. The second part includes additional methods in the <strong>FemViewWindow</strong> class, which is responsible for rendering the main window and the view of the model. </p>
+<p>First, we show the prompt window in the <strong>onDrawImGui</strong> method of the <strong>FemViewWindow</strong> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginMenu</span><span class="p">(</span><span class="s">&quot;Create&quot;</span><span class="p">))</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">MenuItem</span><span class="p">(</span><span class="s">&quot;Create using AI&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">))</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">            </span><span class="n">m_promptWindow</span><span class="o">-&gt;</span><span class="n">show</span><span class="p">();</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="c1">// ...</span>
+</code></pre></div>
+<p>The <strong>ofui::PromptWindow</strong> will call the <strong>FemView</strong> class when the user selects the <strong>Generate</strong> button. The <strong>FemView</strong> class will then call the <strong>makeAiRequest</strong> method to generate the structure. The code below shows the implementation of the <strong>onGenerationComplete</strong> method in the <strong>FemView</strong> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Generate&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ImVec2</span><span class="p">(</span><span class="n">contentSize</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)))</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_view</span><span class="p">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">            </span><span class="n">clearOutput</span><span class="p">();</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">            </span><span class="n">m_view</span><span class="o">-&gt;</span><span class="n">makeAiRequest</span><span class="p">(</span><span class="n">prompt</span><span class="p">());</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>As <strong>makeAiReques(...)</strong> is non-blocking, there is no problem calling this method in the ImGui rendering loop. The <strong>onGenerationComplete</strong> method is called when the structure generation is complete. The code below shows the implementation of the <strong>onGenerationComplete</strong> method in the <strong>FemView</strong> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">FemViewWindow::onGenerationComplete</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">success</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">success</span><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">        </span><span class="n">log</span><span class="p">(</span><span class="s">&quot;AI generation successful.&quot;</span><span class="p">);</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">        </span><span class="n">m_promptWindow</span><span class="o">-&gt;</span><span class="n">clearOutput</span><span class="p">();</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="n">m_promptWindow</span><span class="o">-&gt;</span><span class="n">addOutput</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">m_autoRunAiScript</span><span class="p">)</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">            </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">runScriptFromText</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">        </span><span class="n">m_isProcessingAiRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="k">else</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">        </span><span class="n">log</span><span class="p">(</span><span class="s">&quot;AI generation failed.&quot;</span><span class="p">);</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="n">m_isProcessingAiRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="p">}</span>
+</code></pre></div>
+<h2 id="conclusion">Conclusion</h2>
+<p>This small experiment has shown that it is feasible to implement an AI agent interface in an existing application. One of the key elements making this possible is that the application has some kind of built in scripting language such as ChaiScript or Python. By generating a suitable system prompt it is possible for the application to send a prompt from the user to a backend AI interface and then execute the received script code in the application. There is still a lot of work to fine tune the system prompt to improve the structure generation as it currently stands is not perfect (more on the level of a beginner in structural engineering). However, it can be developed to become a future tool for assisting architects and engineers in the early stages of the design process.</p>
+<p>A demo of the AI agent in ObjectiveFrame can be seen in the video below:</p>
+<iframe width="800" height="450" src="https://www.youtube.com/embed/x_G6p8ybpa0?si=0tkZ7CxJnLWNSc4C" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://jonaslindemann.github.io/objectiveframe/">ObjectiveFrame</a></li>
+<li><a href="https://github.com/jonaslindemann/objectiveframe/releases/download/2.3.0/objectiveframe_setup.exe">ObjectiveFrame download for Windows</a></li>
+<li><a href="https://github.com/jonaslindemann/objectiveframe">ObjectiveFrame on GitHub</a></li>
+<li><a href="https://chaiscript.com/">ChaiScript</a></li>
+<li><a href="https://docs.anthropic.com/en/api/getting-started">Claude API</a></li>
+<li><a href="https://curl.se/">cURL</a></li>
+<li><a href="https://github.com/nlohmann/json">nlohmann/json</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; Jonas Lindemann
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/jonas_lindemann" target="_blank" rel="noopener me" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M433 179.1c0-97.2-63.7-125.7-63.7-125.7-62.5-28.7-228.6-28.4-290.5 0 0 0-63.7 28.5-63.7 125.7 0 115.7-6.6 259.4 105.6 289.1 40.5 10.7 75.3 13 103.3 11.4 50.8-2.8 79.3-18.1 79.3-18.1l-1.7-36.9s-36.3 11.4-77.1 10.1c-40.4-1.4-83-4.4-89.6-54-.6-4.6-.9-9.3-.9-13.9 85.6 20.9 158.7 9.1 178.7 6.7 56.1-6.7 105-41.3 111.2-72.9 9.8-49.8 9-121.5 9-121.5zm-75.1 125.2h-46.6V190.1c0-49.7-64-51.6-64 6.9v62.5H201V197c0-58.5-64-56.6-64-6.9v114.2H90.3c0-122.1-5.2-147.9 18.4-175 25.9-28.9 79.8-30.8 103.8 6.1l11.6 19.5 11.6-19.5c24.1-37.1 78.1-34.8 103.8-6.1 23.7 27.3 18.4 53 18.4 175"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/jonas-lindemann-8632343/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/jonaslindemann" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.youtube.com/@JonasLindemann" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["header.autohide","navigation.instant","navigation.tabs","navigation.tabs.sticky","navigation.top","navigation.tracking","search.highlight"],"search":"../../../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.69c251d7.min.js"></script>
+      
+    
+  </body>
+</html>

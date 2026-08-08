@@ -1,0 +1,1135 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Development notes about C++, Python, Fortran, HPC, mechanics, and graphics.">
+      
+      
+        <meta name="author" content="Jonas Lindemann">
+      
+      
+        <link rel="canonical" href="https://jonaslindemann.github.io/blog/posts/3d_graphics_and_cpp/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.53">
+    
+    
+      
+        <title>The fun of coding 3D graphics in C++ and OpenGL - Coding thoughts</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/classic/main.39e53929.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/classic/palette.7dc9a0ad.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Display:300,300i,400,400i,500,500i,700,700i%7CUbuntu+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Noto Sans Display";--md-code-font:"Ubuntu Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+  
+
+
+  
+
+  <script defer data-domain="jonaslindemann.github.io" src="https://plausible.io/js/script.js"></script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-fun-of-coding-3d-graphics-in-c-and-opengl" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Coding thoughts" class="md-header__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Coding thoughts
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The fun of coding 3D graphics in C++ and OpenGL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../gen-links/" class="md-tabs__link">
+          
+  
+  Links
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Coding thoughts" class="md-nav__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    Coding thoughts
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Blog
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Links
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Links
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gen-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  General
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yt-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Videos
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gh-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Projects
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#design-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Design goals
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-journey-starts" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The journey starts
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#not-calling-new-and-delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Not calling new and delete...
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-scene-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        The Scene Graph
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meshnode-and-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        MeshNode and primitives
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lights-materials-and-textures" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Lights, materials and textures
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windows-and-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Windows and GUI
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-can-you-try-ivf2" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How can you try ivf2?
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-involved" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Getting involved
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<h1 id="the-fun-of-coding-3d-graphics-in-c-and-opengl">The fun of coding 3D graphics in C++ and OpenGL</h1>
+<p><img alt="" src="../images/3d_for_fun.png" /></p>
+<p>There exist several 3D graphics libraries for C++ using OpenGL such as <a href="https://www.raylib.com/">Raylib</a>, <a href="https://www.openscenegraph.org/">OpenSceneGraph</a>, <a href="https://vtk.org/">VTK</a>, <a href="https://magnum.graphics/">Magnum</a>, <a href="https://libcinder.org/">Cinder</a>, <a href="https://openframeworks.cc/">OpenFrameworks</a> and many more.</p>
+<p>There also game engines using C++ such as <a href="https://www.unrealengine.com/">Unreal Engine</a>, <a href="https://godotengine.org/">Godot</a>, <a href="https://www.cryengine.com/">CryEngine</a>, <a href="https://aws.amazon.com/lumberyard/">Lumberyard</a> and more.</p>
+<p>However, my needs for 3d programming have not been for games but for interactive 3d applications mainly in the field of engineering. I have used OpenGL for many years. For my PhD I developed a 3D Scene Graph library, Ivf++, which was a wrapper around OpenGL. It contained a set of nodes for implementing interactive 3D applications, such as ObjectiveFrame a 3D beam analysis application focusing on real-time interaction. </p>
+<p>During the last decade OpenGL has evolved and the fixed function pipeline has been deprecated. Modern OpenGL is based on shaders and the programmable pipeline. This has made OpenGL more powerful, but with the cost of complexity and ease of use. This article is about my journey implementing a new 3D graphics library for C++ that is easy to use and at the same time flexible. Ultimately I want to get back to ease of use of the fixed function pipeline but with the power of modern OpenGL.</p>
+<!-- more -->
+
+<p>In an effort to learn modern OpenGL I started to reimplement the Ivf++ library using modern shader based OpenGL. I didn't want to refactor the original library as it is used in ObjectiveFrame, so I decided to create a new library from scratch, ivf2. At a high level I wanted to remove as many obstacles as possible programming 3D graphics applications in C++. The library should be easy to use and at the same time powerful. Also, it should be fun to create 3D applications in C++. Perhaps I will use it for creative coding at some point in the future.</p>
+<h2 id="design-goals">Design goals</h2>
+<p>As the library is a work in progress, the design goals are not yet fully realized and will probarbly change over time. However, the following are some of the goals I have in mind:</p>
+<ul>
+<li><strong>Easy to use</strong> - consistent syntax and API that is easy to understand)</li>
+<li><strong>Modern OpenGL</strong> - support modern OpenGL features</li>
+<li><strong>Scene Graph</strong> - main focus of rendering is the scene graph</li>
+<li><strong>Rich set of primitives</strong> - support for common 3D primitives</li>
+<li><strong>Interactive</strong> - support for easy interaction with the 3D scene</li>
+<li><strong>Built-in window support (GLFW)</strong> - it should be easy to create a window in the library</li>
+<li><strong>Build-in GUI support (ImGui)</strong> - immediate mode GUI for easy interaction with the application</li>
+<li><strong>Fully object-oriented</strong> - use of classes and objects for easy programming</li>
+<li><strong>Robust</strong> - shared and unique pointer support</li>
+<li><strong>Built-in stock shaders</strong> - no need to implement shaders for simple applications</li>
+<li><strong>Post processing effects</strong> - built-in support for post processing effects</li>
+</ul>
+<h2 id="the-journey-starts">The journey starts</h2>
+<p>The first steps in implementing the library was to create a flexible infrastructure compiling and linking shaders and keeping track of these. Shaders support in ivf2 is implemented in number of classes:</p>
+<ul>
+<li><strong>Shader</strong> - a class for loading and compiling a shader. </li>
+<li><strong>Program</strong> - a class for linking shaders into a program. </li>
+<li><strong>ShaderManager</strong> - a class for managing shaders and programs.</li>
+</ul>
+<p>The <strong>Shader</strong> class can load shaders from file and from strings. The built-in stock shaders are loaded from strings that are included from <ivf/stock_shaders.h>. The <strong>Program</strong> class links shaders into a program. The class also provides an interface to the shader uniforms. The following example shows how to create a simple shader program:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/vertex_shader.h&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/fragment_shader.h&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/program.h&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/stock_shaders.h&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">{</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// Initialization</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">vertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VertexShader</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">ivf</span><span class="o">::</span><span class="n">basic_vert_shader_source</span><span class="p">);</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">fragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FragmentShader</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">ivf</span><span class="o">::</span><span class="n">basic_frag_shader_source</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Program</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">program</span><span class="p">.</span><span class="n">addShader</span><span class="p">(</span><span class="n">vertexShader</span><span class="p">);</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="n">program</span><span class="p">.</span><span class="n">addShader</span><span class="p">(</span><span class="n">fragmentShader</span><span class="p">);</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">program</span><span class="p">.</span><span class="n">link</span><span class="p">())</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to compile and link program.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">        </span><span class="c1">// Main game loop</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">WindowShouldClose</span><span class="p">())</span><span class="w"> </span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="c1">// Draw</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">        </span><span class="n">program</span><span class="o">-&gt;</span><span class="n">use</span><span class="p">();</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">        </span><span class="n">program</span><span class="o">-&gt;</span><span class="n">uniformFloat</span><span class="p">(</span><span class="s">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GetTime</span><span class="p">());</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">        </span><span class="c1">// Draw something</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="c1">// De-Initialization</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="p">}</span>
+</code></pre></div>
+<p>To make it even easier to load and manage shaders a special singleton class <strong>ShaderManager</strong> is used. The <strong>ShaderManager</strong> class is a singleton class that manages shaders and programs. The shader manager implements methods for directly loading and compiling shaders to named programs. The following example shows how to create a simple shader program using the <strong>ShaderManager</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/shader_manager.h&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/stock_shaders.h&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// Initialization</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">shaderManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShaderManager</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shaderManager</span><span class="o">-&gt;</span><span class="n">loadProgram</span><span class="p">(</span><span class="s">&quot;basic&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ivf</span><span class="o">::</span><span class="n">basic_vert_shader_source</span><span class="p">,</span><span class="w"> </span><span class="n">ivf</span><span class="o">::</span><span class="n">basic_frag_shader_source</span><span class="p">);</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">shaderManager</span><span class="o">-&gt;</span><span class="n">compileLinkErrors</span><span class="p">())</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to compile and link program.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="c1">// Main game loop</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">WindowShouldClose</span><span class="p">())</span><span class="w"> </span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="c1">// Draw</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="n">program</span><span class="o">-&gt;</span><span class="n">use</span><span class="p">();</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="n">program</span><span class="o">-&gt;</span><span class="n">uniformFloat</span><span class="p">(</span><span class="s">&quot;time&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GetTime</span><span class="p">());</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="c1">// Draw something</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="c1">// De-Initialization</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="p">}</span>
+</code></pre></div>
+<p>Compiled programs can be convieniently accessed by name using the <strong>ShaderManager</strong>. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Get named program</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">auto</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shaderManager</span><span class="o">-&gt;</span><span class="n">program</span><span class="p">(</span><span class="s">&quot;basic&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">// The the current program</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">shaderManager</span><span class="o">-&gt;</span><span class="n">setCurrentProgram</span><span class="p">(</span><span class="s">&quot;basic&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">auto</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shaderManager</span><span class="o">-&gt;</span><span class="n">currentProgram</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="not-calling-new-and-delete">Not calling new and delete...</h2>
+<p>One major goal of the library was to be able to use shared and unique pointers for managing objects. This means that you don't have to call new and delete for creating objects. The library is fully object-oriented and uses shared and unique pointers for managing objects. </p>
+<p>To support shared pointers and also supporting new users I decided that all classes implemented by the library should have a static create method, which can be called to create an object. By combining this with the auto keyword in C++11, the code becomes very clean and easy to read. The following example shows how to create a shared pointer to a ivf::Cylinder object:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ivf</span><span class="p">;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="k">auto</span><span class="w"> </span><span class="n">cylinder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cylinder</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span>
+</code></pre></div>
+<p>The <strong>create</strong> method is a static method that returns a shared pointer to the object. The object is automatically deleted when the last shared pointer goes out of scope.</p>
+<p>The syntax of using a <strong>create()</strong> method is heavily inspired by Object Pascal and Delphi. I have used Delphi for many years and I like the syntax of creating objects in Delphi.</p>
+<p>To make it easier for new users of the library, all classes also defined a typedef for a shared pointer to the object. This means that you can use the typedef to create a shared pointer to the object. The following example shows how to create a shared pointer to a ivf::Cylinder object using the typedef:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ivf</span><span class="p">;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">CylinderPtr</span><span class="w"> </span><span class="n">cylinder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cylinder</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">// Equivalent to</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1">// std::shared_ptr&lt;Cylinder&gt; cylinder = std::make_shared&lt;Cylinder&gt;(1.0, 1.0, 32);</span>
+</code></pre></div>
+<p>As the library heavily relies on Polymorphism, using shared pointers is a natural choice. The library is designed to be used with shared pointers and the library itself uses shared pointers for managing objects.</p>
+<h2 id="the-scene-graph">The Scene Graph</h2>
+<p>The scene graph in ivf2 is based on 2 main classes <strong>Node</strong> and <strong>CompositeNode</strong>. The <strong>Node</strong> class is the base class for all nodes in the scene graph. The <strong>CompositeNode</strong> class is a node that can contain other nodes. The scene graph is a tree structure where each node can have a parent and children. The scene graph is traversed in a depth-first manner. The following example shows how to create a simple scene graph:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/gl.h&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/nodes.h&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">{</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">scene</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CompositeNode</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">cube</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cube</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">sphere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sphere</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="n">scene</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">(</span><span class="n">cube</span><span class="p">);</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="n">scene</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="p">}</span>
+</code></pre></div>
+<p>Most primitive classes derive from the <strong>TransformNode</strong> class which provides basic transformation functionality. The <strong>TransformNode</strong> class is a node that can be transformed using translation, rotation and scaling. The following example shows how to create a simple scene graph with a transformed cube:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">scene</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CompositeNode</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">auto</span><span class="w"> </span><span class="n">cube</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cube</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">auto</span><span class="w"> </span><span class="n">sphere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sphere</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">cube</span><span class="o">-&gt;</span><span class="n">setPos</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">));</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">sphere</span><span class="o">-&gt;</span><span class="n">setPos</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="meshnode-and-primitives">MeshNode and primitives</h2>
+<p>I realised the time for immediate mode rendering is over. The library is based on modern OpenGL and uses Vertex Buffer Objects (VBO) and Vertex Array Objects (VAO) for rendering. The <strong>MeshNode</strong> class implements the functionality for rendering creating meshes using VBOs and VAOs using a simple interface similar to the fixed function pipeline. To implement a mesh, a derived class overrides the <strong>doSetup</strong> method of the <strong>MeshNode</strong>-class. The following example shows how the <strong>Cube</strong> class implements its mesh:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Cube::doSetup</span><span class="p">()</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">//   y  o--------o</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="c1">//   ^ /|       /| </span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="c1">//   |/ |     2/ |</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="c1">//  3o--------o  |</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="c1">//   |  o-----|--o </span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="c1">//   | /      | / </span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="c1">//   |/       |/</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="c1">//   o--------o --&gt; x</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="c1">//   0        1</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_size</span><span class="o">/</span><span class="mf">2.0</span><span class="p">;</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">);</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">index3i</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// front</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">index3i</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-7-30" name="__codelineno-7-30" href="#__codelineno-7-30"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-31" name="__codelineno-7-31" href="#__codelineno-7-31"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-7-34" name="__codelineno-7-34" href="#__codelineno-7-34"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">vertex3d</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-7-35" name="__codelineno-7-35" href="#__codelineno-7-35"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">color3f</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">);</span>
+<a id="__codelineno-7-36" name="__codelineno-7-36" href="#__codelineno-7-36"></a>
+<a id="__codelineno-7-37" name="__codelineno-7-37" href="#__codelineno-7-37"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">index3i</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="c1">// back</span>
+<a id="__codelineno-7-38" name="__codelineno-7-38" href="#__codelineno-7-38"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">index3i</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<a id="__codelineno-7-39" name="__codelineno-7-39" href="#__codelineno-7-39"></a>
+<a id="__codelineno-7-40" name="__codelineno-7-40" href="#__codelineno-7-40"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-7-41" name="__codelineno-7-41" href="#__codelineno-7-41"></a>
+<a id="__codelineno-7-42" name="__codelineno-7-42" href="#__codelineno-7-42"></a><span class="w">    </span><span class="n">mesh</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">();</span>
+<a id="__codelineno-7-43" name="__codelineno-7-43" href="#__codelineno-7-43"></a><span class="p">}</span>
+</code></pre></div>
+<p>I also realised that implementing all primitives in the library would be a huge task. To solve this I search the internet and github for a solution to this problem. What I found was a geometry generator called <a href="https://github.com/ilmola/generator">Generator</a>. It is a header only library that can generate most basic primitives shapes that can be used in 3D graphics. Most of the primitives in ivf2 are implemented using the Generator library. The following example shows how to create a sphere using the Generator library:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// ...</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Sphere::doSetup</span><span class="p">()</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">{</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">SphereMesh</span><span class="w"> </span><span class="n">sphere</span><span class="p">(</span><span class="n">m_radius</span><span class="p">,</span><span class="w"> </span><span class="n">m_slices</span><span class="p">,</span><span class="w"> </span><span class="n">m_segments</span><span class="p">,</span><span class="w"> </span><span class="n">m_sliceStart</span><span class="p">,</span><span class="w"> </span><span class="n">m_sliceSweep</span><span class="p">,</span><span class="w"> </span><span class="n">m_segmentStart</span><span class="p">,</span><span class="w"> </span><span class="n">m_segmentSweep</span><span class="p">);</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="n">AnyGenerator</span><span class="o">&lt;</span><span class="n">MeshVertex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vertices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sphere</span><span class="p">.</span><span class="n">vertices</span><span class="p">();</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="n">AnyGenerator</span><span class="o">&lt;</span><span class="n">Triangle</span><span class="o">&gt;</span><span class="w"> </span><span class="n">triangles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sphere</span><span class="p">.</span><span class="n">triangles</span><span class="p">();</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="k">this</span><span class="o">-&gt;</span><span class="n">createFromGenerator</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span><span class="w"> </span><span class="n">triangles</span><span class="p">);</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">}</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="c1">// ...</span>
+</code></pre></div>
+<p>To support generating geometry using this library the <strong>MeshNode</strong> class implements a special method <strong>createFromGenerator</strong> that can create a mesh from a generator. The <strong>createFromGenerator</strong> method takes two generators, one for vertices and one for triangles. </p>
+<h2 id="lights-materials-and-textures">Lights, materials and textures</h2>
+<p>To recreate an environment similar to the fixed function pipeline, ivf2 comes with built-in support for lights, materials and textures. The <strong>Light</strong> class implements a light source that can be used in the scene. The <strong>Material</strong> class implements a material that can be used to set the material properties of an object. The <strong>Texture</strong> class implements a texture that can be used to texture an object. The following example shows how to create a light, material and texture:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">shaderMgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShaderManager</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1">// Load our basic shader</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">shaderMgr</span><span class="o">-&gt;</span><span class="n">loadBasicShader</span><span class="p">();</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1">// Lights are managed by the LightManager</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">auto</span><span class="w"> </span><span class="n">lightMgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LightManager</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="c1">// Add a point light</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="k">auto</span><span class="w"> </span><span class="n">pointLight1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lightMgr</span><span class="o">-&gt;</span><span class="n">addPointLight</span><span class="p">();</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setEnabled</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setDiffuseColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setSpecularColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setAttenuation</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">));</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="c1">// Update the shader</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="n">lightMgr</span><span class="o">-&gt;</span><span class="n">apply</span><span class="p">();</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="c1">// Create a material</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="k">auto</span><span class="w"> </span><span class="n">material</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Material</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="n">material</span><span class="o">-&gt;</span><span class="n">setDiffuseColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">random</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">),</span><span class="w"> </span><span class="n">random</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">),</span><span class="w"> </span><span class="n">random</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">),</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="n">material</span><span class="o">-&gt;</span><span class="n">setAmbientColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="c1">// Create a sphere with an attached material</span>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="k">auto</span><span class="w"> </span><span class="n">sphere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sphere</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="n">sphere</span><span class="o">-&gt;</span><span class="n">setMaterial</span><span class="p">(</span><span class="n">material</span><span class="p">);</span>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="c1">// ...</span>
+</code></pre></div>
+<p>Textures can also be attached to nodes in the scene graph. The <strong>Texture</strong> class implements a texture that can be used to texture an object. The following example shows how to create a texture and attach it to a node:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">textureCat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Texture</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">textureCat</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;assets/pop_cat.png&quot;</span><span class="p">);</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">auto</span><span class="w"> </span><span class="n">textureBrick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Texture</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">textureBrick</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;assets/brick.png&quot;</span><span class="p">);</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">auto</span><span class="w"> </span><span class="n">sphere</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sphere</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="n">sphere</span><span class="o">-&gt;</span><span class="n">setTexture</span><span class="p">(</span><span class="n">textureCat</span><span class="p">);</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="n">sphere</span><span class="o">-&gt;</span><span class="n">setMaterial</span><span class="p">(</span><span class="n">sphereMaterial</span><span class="p">);</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">sphere</span><span class="o">-&gt;</span><span class="n">setPos</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">));</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="k">auto</span><span class="w"> </span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Box</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="n">box</span><span class="o">-&gt;</span><span class="n">setTexture</span><span class="p">(</span><span class="n">textureBrick</span><span class="p">);</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="n">box</span><span class="o">-&gt;</span><span class="n">setMaterial</span><span class="p">(</span><span class="n">sphereMaterial</span><span class="p">);</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="n">box</span><span class="o">-&gt;</span><span class="n">setPos</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">));</span>
+</code></pre></div>
+<h2 id="windows-and-gui">Windows and GUI</h2>
+<p>To make it easy to create a window and GUI in the library, ivf2 comes with built-in support for GLFW and ImGui in the <strong>ivfui</strong>-library. Window support in ivf2 is implemented using the GLFW library encapsulated in <strong>GLFWApplication</strong>, <strong>GLFWWindow</strong> and <strong>GLFWSceneWindow</strong> classes. The <strong>Application</strong> class is a singleton class that manages GLFW windows and the rendering contexts. The following examples illustrates a versy simple ivf2 GLFW application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivfui/glfw_application.h&gt;</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivfui/glfw_window.h&gt;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/gl.h&gt;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivf/nodes.h&gt;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ivfui/ui.h&gt;</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ivf</span><span class="p">;</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ivfui</span><span class="p">;</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="p">;</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="k">class</span><span class="w"> </span><span class="nc">ExampleWindow</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">GLFWWindow</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="k">private</span><span class="o">:</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="n">CompositeNodePtr</span><span class="w"> </span><span class="n">m_scene</span><span class="p">;</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">    </span><span class="n">CameraManipulatorPtr</span><span class="w"> </span><span class="n">m_camManip</span><span class="p">;</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="n">ExampleWindow</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">GLFWWindow</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">)</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">    </span><span class="p">{}</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ExampleWindow</span><span class="o">&gt;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">)</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ExampleWindow</span><span class="o">&gt;</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">);</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">onSetup</span><span class="p">()</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="w">        </span><span class="c1">// Setup the scene</span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a><span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">shaderMgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShaderManager</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a><span class="w">        </span><span class="n">shaderMgr</span><span class="o">-&gt;</span><span class="n">loadBasicShader</span><span class="p">();</span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">lightMgr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LightManager</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">pointLight1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lightMgr</span><span class="o">-&gt;</span><span class="n">addPointLight</span><span class="p">();</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="w">        </span><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setEnabled</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a><span class="w">        </span><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setDiffuseColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a><span class="w">        </span><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setSpecularColor</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">));</span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a><span class="w">        </span><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setAttenuation</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">);</span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a><span class="w">        </span><span class="n">pointLight1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">glm</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">,</span><span class="w"> </span><span class="mf">5.0</span><span class="p">));</span>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a><span class="w">        </span><span class="n">lightMgr</span><span class="o">-&gt;</span><span class="n">apply</span><span class="p">();</span>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="w">        </span><span class="n">m_scene</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CompositeNode</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a><span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">axis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Axis</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a><span class="w">        </span><span class="n">m_scene</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">(</span><span class="n">axis</span><span class="p">);</span>
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>
+<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a><span class="w">        </span><span class="c1">// Create more nodes ...</span>
+<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>
+<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a><span class="w">        </span><span class="n">m_scene</span><span class="o">-&gt;</span><span class="n">add</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>
+<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a><span class="w">        </span><span class="n">m_camManip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CameraManipulator</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">ref</span><span class="p">());</span>
+<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>
+<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">onDraw</span><span class="p">()</span>
+<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a><span class="w">        </span><span class="c1">// This method is called continuously to draw the scene</span>
+<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>
+<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a><span class="w">        </span><span class="n">glClearColor</span><span class="p">(</span><span class="mf">0.07f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.13f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.17f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a><span class="w">        </span><span class="n">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">GL_DEPTH_BUFFER_BIT</span><span class="p">);</span>
+<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>
+<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a><span class="w">        </span><span class="c1">// Update the camera manipulator</span>
+<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>
+<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a><span class="w">        </span><span class="n">m_camManip</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">();</span>
+<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>
+<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a><span class="w">        </span><span class="c1">// Draw the scene</span>
+<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>
+<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a><span class="w">        </span><span class="n">m_scene</span><span class="o">-&gt;</span><span class="n">draw</span><span class="p">();</span>
+<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>
+<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">onResize</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">height</span><span class="p">)</span>
+<a id="__codelineno-11-79" name="__codelineno-11-79" href="#__codelineno-11-79"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-11-80" name="__codelineno-11-80" href="#__codelineno-11-80"></a><span class="w">        </span><span class="c1">// This method is called when the window is resized</span>
+<a id="__codelineno-11-81" name="__codelineno-11-81" href="#__codelineno-11-81"></a>
+<a id="__codelineno-11-82" name="__codelineno-11-82" href="#__codelineno-11-82"></a><span class="w">        </span><span class="n">m_camManip</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">();</span>
+<a id="__codelineno-11-83" name="__codelineno-11-83" href="#__codelineno-11-83"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-84" name="__codelineno-11-84" href="#__codelineno-11-84"></a><span class="p">};</span>
+<a id="__codelineno-11-85" name="__codelineno-11-85" href="#__codelineno-11-85"></a>
+<a id="__codelineno-11-86" name="__codelineno-11-86" href="#__codelineno-11-86"></a><span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ExampleWindow</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ExampleWindowPtr</span><span class="p">;</span>
+<a id="__codelineno-11-87" name="__codelineno-11-87" href="#__codelineno-11-87"></a>
+<a id="__codelineno-11-88" name="__codelineno-11-88" href="#__codelineno-11-88"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<a id="__codelineno-11-89" name="__codelineno-11-89" href="#__codelineno-11-89"></a><span class="p">{</span>
+<a id="__codelineno-11-90" name="__codelineno-11-90" href="#__codelineno-11-90"></a><span class="w">    </span><span class="c1">// Create application object</span>
+<a id="__codelineno-11-91" name="__codelineno-11-91" href="#__codelineno-11-91"></a>
+<a id="__codelineno-11-92" name="__codelineno-11-92" href="#__codelineno-11-92"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GLFWApplication</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+<a id="__codelineno-11-93" name="__codelineno-11-93" href="#__codelineno-11-93"></a>
+<a id="__codelineno-11-94" name="__codelineno-11-94" href="#__codelineno-11-94"></a><span class="w">    </span><span class="c1">// Set context hints</span>
+<a id="__codelineno-11-95" name="__codelineno-11-95" href="#__codelineno-11-95"></a>
+<a id="__codelineno-11-96" name="__codelineno-11-96" href="#__codelineno-11-96"></a><span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">hint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MAJOR</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<a id="__codelineno-11-97" name="__codelineno-11-97" href="#__codelineno-11-97"></a><span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">hint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MINOR</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<a id="__codelineno-11-98" name="__codelineno-11-98" href="#__codelineno-11-98"></a><span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">hint</span><span class="p">(</span><span class="n">GLFW_OPENGL_PROFILE</span><span class="p">,</span><span class="w"> </span><span class="n">GLFW_OPENGL_CORE_PROFILE</span><span class="p">);</span>
+<a id="__codelineno-11-99" name="__codelineno-11-99" href="#__codelineno-11-99"></a><span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">hint</span><span class="p">(</span><span class="n">GLFW_SAMPLES</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<a id="__codelineno-11-100" name="__codelineno-11-100" href="#__codelineno-11-100"></a>
+<a id="__codelineno-11-101" name="__codelineno-11-101" href="#__codelineno-11-101"></a><span class="w">    </span><span class="c1">// Create a window</span>
+<a id="__codelineno-11-102" name="__codelineno-11-102" href="#__codelineno-11-102"></a>
+<a id="__codelineno-11-103" name="__codelineno-11-103" href="#__codelineno-11-103"></a><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ExampleWindow</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="w"> </span><span class="mi">800</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Example 1&quot;</span><span class="p">);</span>
+<a id="__codelineno-11-104" name="__codelineno-11-104" href="#__codelineno-11-104"></a><span class="w">    </span><span class="n">window</span><span class="o">-&gt;</span><span class="n">maximize</span><span class="p">();</span>
+<a id="__codelineno-11-105" name="__codelineno-11-105" href="#__codelineno-11-105"></a>
+<a id="__codelineno-11-106" name="__codelineno-11-106" href="#__codelineno-11-106"></a><span class="w">    </span><span class="c1">// Add the window to the application</span>
+<a id="__codelineno-11-107" name="__codelineno-11-107" href="#__codelineno-11-107"></a>
+<a id="__codelineno-11-108" name="__codelineno-11-108" href="#__codelineno-11-108"></a><span class="w">    </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">addWindow</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+<a id="__codelineno-11-109" name="__codelineno-11-109" href="#__codelineno-11-109"></a>
+<a id="__codelineno-11-110" name="__codelineno-11-110" href="#__codelineno-11-110"></a><span class="w">    </span><span class="c1">// Run the application</span>
+<a id="__codelineno-11-111" name="__codelineno-11-111" href="#__codelineno-11-111"></a>
+<a id="__codelineno-11-112" name="__codelineno-11-112" href="#__codelineno-11-112"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">app</span><span class="o">-&gt;</span><span class="n">loop</span><span class="p">();</span>
+<a id="__codelineno-11-113" name="__codelineno-11-113" href="#__codelineno-11-113"></a><span class="p">}</span>
+</code></pre></div>
+<p>The final rendered window could look something like this:</p>
+<p><img alt="" src="../images/ivf2_example1.png" /></p>
+<h2 id="how-can-you-try-ivf2">How can you try ivf2?</h2>
+<p>The library is still in development and not yet ready for release. However, you can try the library by cloning the repository from <a href="https://github.com/jonaslindemann/ivf2">https://github.com/jonaslindemann/ivf2</a>. Build instruction are available in the README.md file in the repository.</p>
+<h2 id="getting-involved">Getting involved</h2>
+<p>If you are interested in the project and want to get involved, my contact information is here: <a href="https://www.lu.se/lucat/user/7e4f2075cc49072ab067c1edd5f12fab">Jonas Lindemann</a></p>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; Jonas Lindemann
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/jonas_lindemann" target="_blank" rel="noopener me" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M433 179.1c0-97.2-63.7-125.7-63.7-125.7-62.5-28.7-228.6-28.4-290.5 0 0 0-63.7 28.5-63.7 125.7 0 115.7-6.6 259.4 105.6 289.1 40.5 10.7 75.3 13 103.3 11.4 50.8-2.8 79.3-18.1 79.3-18.1l-1.7-36.9s-36.3 11.4-77.1 10.1c-40.4-1.4-83-4.4-89.6-54-.6-4.6-.9-9.3-.9-13.9 85.6 20.9 158.7 9.1 178.7 6.7 56.1-6.7 105-41.3 111.2-72.9 9.8-49.8 9-121.5 9-121.5zm-75.1 125.2h-46.6V190.1c0-49.7-64-51.6-64 6.9v62.5H201V197c0-58.5-64-56.6-64-6.9v114.2H90.3c0-122.1-5.2-147.9 18.4-175 25.9-28.9 79.8-30.8 103.8 6.1l11.6 19.5 11.6-19.5c24.1-37.1 78.1-34.8 103.8-6.1 23.7 27.3 18.4 53 18.4 175"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/jonas-lindemann-8632343/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/jonaslindemann" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.youtube.com/@JonasLindemann" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["header.autohide","navigation.instant","navigation.tabs","navigation.tabs.sticky","navigation.top","navigation.tracking","search.highlight"],"search":"../../../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.69c251d7.min.js"></script>
+      
+    
+  </body>
+</html>

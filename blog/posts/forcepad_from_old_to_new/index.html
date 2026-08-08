@@ -1,0 +1,1147 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Development notes about C++, Python, Fortran, HPC, mechanics, and graphics.">
+      
+      
+        <meta name="author" content="Jonas Lindemann">
+      
+      
+        <link rel="canonical" href="https://jonaslindemann.github.io/blog/posts/forcepad_from_old_to_new/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.53">
+    
+    
+      
+        <title>ForcePAD from Legacy to Modern - Coding thoughts</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../../assets/stylesheets/classic/main.39e53929.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/classic/palette.7dc9a0ad.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+Display:300,300i,400,400i,500,500i,700,700i%7CUbuntu+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Noto Sans Display";--md-code-font:"Ubuntu Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+  
+
+
+  
+
+  <script defer data-domain="jonaslindemann.github.io" src="https://plausible.io/js/script.js"></script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#forcepad-from-legacy-to-modern" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Coding thoughts" class="md-header__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Coding thoughts
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ForcePAD from Legacy to Modern
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="slate" data-md-color-primary="yellow" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-moon" viewBox="0 0 24 24"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link">
+        
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+      
+    
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../gen-links/" class="md-tabs__link">
+          
+  
+  Links
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Coding thoughts" class="md-nav__button md-logo" aria-label="Coding thoughts" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M198.8 1.8c9-3.7 19.3-1.7 26.2 5.2l56 56c9.4 9.4 9.4 24.6 0 33.9l-56 56c-6.9 6.9-17.2 8.9-26.2 5.2S184 145.7 184 136v-24h-24c-17.7 0-32 14.3-32 32v214.7c28.3 12.3 48 40.5 48 73.3 0 44.2-35.8 80-80 80s-80-35.8-80-80c0-32.8 19.7-61 48-73.3V144c0-53 43-96 96-96h24V24c0-9.7 5.8-18.5 14.8-22.2M392 80a24 24 0 1 0 48 0 24 24 0 1 0-48 0m-8 73.3c-28.3-12.3-48-40.5-48-73.3 0-44.2 35.8-80 80-80s80 35.8 80 80c0 32.8-19.7 61-48 73.3V368c0 53-43 96-96 96h-24v24c0 9.7-5.8 18.5-14.8 22.2s-19.3 1.7-26.2-5.2l-56-56c-9.4-9.4-9.4-24.6 0-33.9l56-56c6.9-6.9 17.2-8.9 26.2-5.2S328 366.3 328 376v24h24c17.7 0 32-14.3 32-32zM72 432a24 24 0 1 0 48 0 24 24 0 1 0-48 0"/></svg>
+
+    </a>
+    Coding thoughts
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Home
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Blog
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Links
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+  Links
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gen-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  General
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../yt-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Videos
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../gh-links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Projects
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-migration-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A migration strategy
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-new-user-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A new user interface
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#careful-transition-from-fltk-to-qt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Careful transition from FLTK to Qt
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#legacy-opengl-to-modern-opengl" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Legacy OpenGL to Modern OpenGL
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Legacy OpenGL to Modern OpenGL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#renderer2d-the-new-rendering-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Renderer2D - The new rendering layer
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-new-shader-based-rendering-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        A new shader based rendering layer
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-this-migration-taught-me" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        What this migration taught me
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modern-opengl-and-webassembly-a-new-possibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Modern OpenGL and WebAssembly - A new possibility
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<h1 id="forcepad-from-legacy-to-modern">ForcePAD from Legacy to Modern</h1>
+<p><img alt="" src="../images/forcepad_legacy_modern.png" /></p>
+<p>The ForcePAD application started life in the early 2000s as a research tool built with C++ and FLTK, with graphics rendered through OpenGL. At the time, that was a practical choice. It was portable enough to run on both Windows and Unix/Linux systems, and it could take advantage of hardware-accelerated graphics on the workstations available to us. For a long time, it served that purpose very well.</p>
+<p>Over the years, however, the software started to show its age. FLTK felt increasingly dated, and the fixed-function OpenGL pipeline that once made the application feel modern became a liability. The result was not only a maintenance problem; it also became harder to build and run on newer systems, especially outside the desktop environment where the application had originally been developed.</p>
+<p>What makes this story interesting is that the change did not begin as a grand rewrite. I did not want to throw away the model that had already proven itself in research and teaching. The core idea of the application was still sound: users sketch structures, add constraints and loads, and then inspect the resulting behavior. The goal was therefore not to redesign the application from scratch, but to move it forward while preserving what had already worked.</p>
+<p>That is why the migration became a careful transition from old to new. I kept the underlying mechanics and the conceptual model intact while gradually replacing the layers that had become obstacles: the user interface, the rendering path, and the surrounding infrastructure. In that sense, this was less a rewrite than a modernization project built around continuity.</p>
+<!-- more -->
+
+<p>Initially I considered rewriting the application from scratch using a modern C++ framework such as Qt. That idea was appealing, but it would have required a lot of work and a complete reimplementation of the user interface and graphics stack. The current application model was still valid, and I wanted to keep it. The better option was to see what it would take to modernize the application and make it portable to modern platforms without losing the behavior that had already been validated in practice.</p>
+<p>The work therefore fell into three main areas:</p>
+<ol>
+<li>Replace FLTK with a modern C++ GUI framework that supports OpenGL and is portable to modern platforms.</li>
+<li>Modernize the existing application code to use contemporary C++ conventions and safer abstractions.</li>
+<li>Replace the legacy OpenGL fixed-function pipeline with a shader-based rendering approach that could eventually support WebAssembly and other modern targets.</li>
+</ol>
+<p>These are significant tasks, and a couple of years ago I would probably have hesitated to take them on. But experience with AI-assisted coding made the process feel much more realistic. I had already seen how it could accelerate implementation, help with code generation, and reduce the friction of working in large, older codebases. That made it possible to approach the migration not as a risky leap but as a series of manageable steps.</p>
+<h2 id="a-migration-strategy">A migration strategy</h2>
+<p>The key decision was to preserve the existing application model and replace the surrounding technology incrementally. The old ForcePAD implementation already contained a lot of valuable logic: finite element routines, model handling, interaction rules, and the overall workflow. What had become outdated was mainly the platform around it.</p>
+<p>That is why I treated the transition as a series of layered changes rather than a single big-bang rewrite. The user interface could be modernized first, the rendering path could be replaced later, and the old and new implementations could coexist while the migration was underway. This reduced the risk dramatically and made it much easier to test and validate each step.</p>
+<h2 id="a-new-user-interface">A new user interface</h2>
+<p>Qt offers far more flexibility for building a modern interface, so I decided to do a major user interface overhaul. Instead of jumping straight into the Qt implementation, I first created a mockup of the new user interface in Figma. That allowed me to iterate quickly and evaluate what would work before committing to the real implementation. One interesting feature of Figma is its built-in AI-assisted design tools, which can generate design elements from text prompts. To create the mockup, I started with the following prompt:</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>I am working on a refactoring of the ForcePAD application (see attached image). The application is a 2D mechanics application where you paint with stiffness. It has 3 main mode. Sketch mode - Drawing structures with stiffness, Physicks mode - Adding constraints and boundary conditions, Action mode - visualising deflections and stresses in the structure.</p>
+<p>Main idea. 3 tabs for the main modes with related tools in each tab. The attached images shows the different modes. I am using Qt for the refactoring and I want to use the standard Windows 11 style.</p>
+</div>
+<p>After a couple of iterations Figma generated a fully functional mockup of the new user interface. The following image shows the final mockup of the new user interface.</p>
+<p><img alt="" src="../images/figma_ui.png" /></p>
+<p>This mockup was, of course, not directly usable in Qt. But it was still valuable because it gave me a clear design direction. I therefore used Figma to generate a textual description that could be used to drive the Qt implementation. That is exactly what I did. I used the following prompt to generate a textual description of the user interface:</p>
+<div class="admonition question">
+<p class="admonition-title">Question</p>
+<p>Looks good. I need a plain text description which I can give to Claude Code to contine refactoring my Qt interface.</p>
+</div>
+<p>This is the generated textual description of the user interface:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ForcePAD Application - UI Specification
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Overview
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>ForcePAD is a 2D structural mechanics application where users &quot;paint with stiffness&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>to design and analyze beam structures. The application has three primary modes accessed 
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>via tabs, each with dedicated toolsets.
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Application Layout
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Top-Level Structure
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>┌─────────────────────────────────────────────┐
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│ Menu Bar                                    │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>├─────────────────────────────────────────────┤
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│ Mode Tabs: [Sketch] [Physicks] [Action]     │
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├──┬──────────────────────────────────────┬───┤
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│  │                                      │   │
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│T │      Canvas Area (white)             │ P │
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│o │                                      │ r │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│o │                                      │ o │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│l │                                      │ p │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│b │                                      │ s │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│a │                                      │   │
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│r │                                      │   │
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│  │                                      │   │
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>├──┴──────────────────────────────────────┴───┤
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>│ Status Bar                                  │
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>└─────────────────────────────────────────────┘
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Main Components
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Menu Bar (top, ~40px height)
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>Standard menus: File, Edit, View, Mode, Settings, Help
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>White background, subtle bottom border
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Windows 11 native styling
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>Mode Tab Bar (below menu, ~48px height)
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>Three tabs: &quot;Sketch Mode&quot;, &quot;Physicks Mode&quot;, &quot;Action Mode&quot;
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>Active tab highlighted with accent color (blue underline)
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>Light gray background, tabs have rounded top corners
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>Left Toolbar (vertical, ~56px width)
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>... More descriptions follow ...
+</code></pre></div>
+<p>I used Claude Code to generate the Qt code for the user interface based on this textual description. Surprisingly, it produced a fully working Qt application with the new user interface wired up directly in C++ code.</p>
+<h2 id="careful-transition-from-fltk-to-qt">Careful transition from FLTK to Qt</h2>
+<p><img alt="" src="../images/old_modern_bridge.jpeg" /></p>
+<p>The existing FLTK version of ForcePAD is a large application with many features. For that reason, I decided to make the transition carefully. I started by creating an additional target, <code>qtforcepad</code>, in the build system. This allowed me to build both the existing FLTK version and the new Qt version of ForcePAD in parallel. In the first step, I focused on the transition to Qt and postponed the porting of the legacy OpenGL code. My rule was to take one step at a time.</p>
+<p>Functionality in the legacy ForcePAD is implemented in several libraries:</p>
+<ul>
+<li>calfem - The core library for finite element analysis.</li>
+<li>ivf2d - The library for 2D graphics and user interaction (Fixed function OpenGL).</li>
+<li>common - The library for common functionality such as file I/O, data structures, etc.</li>
+</ul>
+<p>The main interaction in the ForcePAD application is implemented in the <code>PaintView</code> class. This class handles all the interaction with the underlying graphics library and the user interface. In an earlier porting attempt, I had already abstracted the class into a base class so that a Qt version could be created later. The legacy version of ForcePAD uses the <code>FlPaintView</code> class to implement FLTK functionality. Before starting the port, I decided to create a new library, <code>paintview</code>, containing the base class <code>PaintView</code>. This library is shared between the FLTK port and the Qt port.</p>
+<p>The <code>QtPaintView</code> class derives from the <code>QOpenGLWidget</code> and <code>PaintView</code> base classes and implements the functionality of the <code>PaintView</code>-class. </p>
+<p>This approach let me reuse a lot of the existing functionality in the legacy ForcePAD application. The following code shows some of the definitions in <code>fp::PaintView</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">PaintView</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="cm">/*</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="cm">     *    Edit modes</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="cm">     */</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">TEditMode</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="n">EM_BRUSH</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">EM_DIRECT_BRUSH</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">EM_ERASE</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="cm">/*</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="cm">         *  ... more modes ...</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="cm">         */</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="n">EM_PASTE</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="n">EM_RESULT</span><span class="p">,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">EM_RULER</span><span class="p">,</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">EM_ARCH</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">TImportMode</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">        </span><span class="n">IM_NEW_MODEL</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="n">IM_PASTE</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">TViewMode</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="n">VM_SKETCH</span><span class="p">,</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">        </span><span class="n">VM_PHYSICS</span><span class="p">,</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">        </span><span class="n">VM_ACTION</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">TVisualisationMode</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">        </span><span class="n">VM_PRINCIPAL_STRESS</span><span class="p">,</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">        </span><span class="n">VM_MISES_STRESS</span><span class="p">,</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">        </span><span class="n">VM_DISPLACEMENTS</span><span class="p">,</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">        </span><span class="n">VM_STRUCTURE</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="c1">// ... more code ...</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="k">protected</span><span class="o">:</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">    </span><span class="c1">// ... more code ...</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">    </span><span class="n">TEditMode</span><span class="w"> </span><span class="n">m_editMode</span><span class="p">;</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">    </span><span class="n">TViewMode</span><span class="w"> </span><span class="n">m_viewMode</span><span class="p">;</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">    </span><span class="n">TVisualisationMode</span><span class="w"> </span><span class="n">m_visualisationMode</span><span class="p">;</span><span class="w">    </span>
+</code></pre></div>
+<p>Basically <code>fp::PaintView</code> is a state machine that handles the different modes of the application. The <code>QtPaintView</code> class implements the functionality of the <code>PaintView</code> class and handles the interaction with the user interface and the underlying graphics library.</p>
+<p>The class also contains a number of virtual functions that are supposed to be implemented in the derived classes. The following code shows some of the virtual functions in <code>fp::PaintView</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doRedraw</span><span class="p">();</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doFlush</span><span class="p">();</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doInvalidate</span><span class="p">();</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doMakeCurrent</span><span class="p">();</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="c1">// ... more code ...</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">doSaveDialog</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">                                       </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">defaultFilename</span><span class="p">);</span>
+</code></pre></div>
+<p>These virtual functions are called by the derived classes to implement the functionality of the <code>PaintView</code> class. The <code>QtPaintView</code> class implements these functions using the Qt framework.</p>
+<p>Using Claude Code, I was able to implement the <code>QtPaintView</code> class in a few hours. The following code shows the implementation of the <code>doSaveDialog()</code> function:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">QtPaintView::doSaveDialog</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">                                             </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">defaultFilename</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">QString</span><span class="w"> </span><span class="n">qfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QString</span><span class="o">::</span><span class="n">fromStdString</span><span class="p">(</span><span class="n">filter</span><span class="p">);</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">qfilter</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">qfilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ForcePAD Files (*.fp2);;All Files (*)&quot;</span><span class="p">;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="n">QString</span><span class="w"> </span><span class="n">fname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QFileDialog</span><span class="o">::</span><span class="n">getSaveFileName</span><span class="p">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="k">this</span><span class="p">,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="n">QString</span><span class="o">::</span><span class="n">fromStdString</span><span class="p">(</span><span class="n">title</span><span class="p">),</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="n">QString</span><span class="o">::</span><span class="n">fromStdString</span><span class="p">(</span><span class="n">defaultFilename</span><span class="p">),</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="n">qfilter</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="p">);</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">fname</span><span class="p">.</span><span class="n">toStdString</span><span class="p">();</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="p">}</span>
+</code></pre></div>
+<p>Claude Code also wired up the signals and slots in the <code>QtPaintView</code> class to handle user interaction in the <code>MainWindow</code>-class. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">MainWindow</span><span class="o">::</span><span class="n">MainWindow</span><span class="p">(</span><span class="n">QWidget</span><span class="w"> </span><span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">QMainWindow</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">{</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">m_paintView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QtPaintView</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setModeChangeEvent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setViewModeChangeEvent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setViewModeErrorEvent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setModelLoadedEvent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setNewModelEvent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">setViewMode</span><span class="p">(</span><span class="n">fp</span><span class="o">::</span><span class="n">PaintView</span><span class="o">::</span><span class="n">VM_SKETCH</span><span class="p">);</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">&quot;ForcePAD&quot;</span><span class="p">);</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="n">resize</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span><span class="w"> </span><span class="mi">800</span><span class="p">);</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p">}</span>
+</code></pre></div>
+<p>Since most of the functionality is implemented in the <code>PaintView</code> class, I was able to implement the <code>QtPaintView</code> class fairly quickly. Many of the event slots could be implemented by simply delegating the call to the <code>PaintView</code> class. The following code shows a few examples of slots calling the <code>PaintView</code> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">MainWindow::fileNew</span><span class="p">()</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">newModel</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">MainWindow::fileOpen</span><span class="p">()</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">openModel</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">MainWindow::fileSave</span><span class="p">()</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">saveModel</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">MainWindow::fileSaveAs</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">saveModelAs</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kt">void</span><span class="w"> </span><span class="nf">MainWindow::editUndo</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">m_paintView</span><span class="o">-&gt;</span><span class="n">undo</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h2 id="legacy-opengl-to-modern-opengl">Legacy OpenGL to Modern OpenGL</h2>
+<p><img alt="" src="../images/legacy_modern.png" /></p>
+<p>Once the user interface had been implemented in Qt, I turned my attention to the graphics code. The legacy ForcePAD application uses the old fixed-function OpenGL pipeline, which is no longer supported on many platforms. Since ForcePAD is used in teaching, this was a major limitation: the application could not easily be compiled for modern platforms, including the web. That made it clear that I needed to replace the legacy OpenGL code with a modern approach.</p>
+<p>That was not as simple as it sounded. The legacy OpenGL code is implemented in the <code>ivf2d</code> library, which contains a great deal of functionality for 2D graphics and user interaction. The library is also quite large and complex, so replacing the legacy OpenGL code with a modern implementation would be a significant undertaking. The question was whether that could be done without rewriting the entire library.</p>
+<p>I asked Claude Code whether it would be possible to replace the legacy OpenGL code with a modern implementation without rewriting the entire library. Before committing to an approach, I let it develop a plan for modernizing the OpenGL code so I could evaluate whether the idea was feasible and whether it could be implemented within a reasonable time frame. The following is the plan that Claude Code developed.</p>
+<p>To summarize the plan, Claude set the following goal:</p>
+<p><strong>Goal:</strong> Replace all legacy/fixed-function OpenGL in the ForcePAD rendering path with a small modern-GL abstraction (VBO + shaders, GLES-compatible), so that the <em>desktop</em> <code>qtforcepad</code> build keeps working while the code becomes portable to <strong>WebGL 2 (OpenGL ES 3.0)</strong> for the future Qt-for-WebAssembly port.</p>
+<p>After defining these overarching goals, Claude Code developed a detailed plan for modernizing the OpenGL code. The plan is divided into several steps:</p>
+<ol>
+<li>Rendering inventory: Identify all legacy OpenGL calls in the <code>ivf2d</code> library and categorize them by functionality (e.g., drawing primitives, transformations, text rendering, etc.).</li>
+<li>Abstraction layer: Create a small abstraction layer that encapsulates modern OpenGL functionality (VBOs, VAOs, shaders) and provides a similar interface to the legacy OpenGL calls. This layer should be designed to be compatible with both desktop OpenGL and WebGL 2.</li>
+<li>Create the scaffolding such as a small matrix library <code>Mat4</code>, shader support <code>GLProgram</code>, the rendering layer class <code>Renderer2D</code>, and the texture abstraction for the image lahyer in ForcePAD <code>StreamTexture</code>.</li>
+<li>Phased implementation of the rendering functionality: Gradually replace legacy OpenGL calls in the <code>ivf2d</code> library with calls to the new abstraction layer. Start with simple primitives and gradually move to more complex rendering tasks.</li>
+<li>Finally integrating the new rendering layer into the <code>PaintView</code> class and ensure that the application continues to function correctly.</li>
+<li>Testing and validation: Thoroughly test the application to ensure that the new rendering layer works correctly and that there are no regressions in functionality or performance. Finally changing from a compatibility mode to a modern OpenGL mode in ForcePAD.</li>
+</ol>
+<p>The final plan was much longer and required several iterations before it reached its final form. It was very detailed and required a lot of work to implement. However, I was confident that it was feasible and that it could be carried out within a reasonable time frame.</p>
+<h3 id="renderer2d-the-new-rendering-layer">Renderer2D - The new rendering layer</h3>
+<p>Perhaps the most interesting part of the plan is the <code>Renderer2D</code> class. This class is the main interface between the ForcePAD application and the underlying graphics library. The class is responsible for rendering all the graphics in the application. The idea is to provide enough functionality in the <code>Renderer2D</code> class to be able to implement all the functionality in the ForcePAD application without having to use any legacy OpenGL calls. The class is implemented as a singleton pattern as it emulates the fixed function state machine The following code shows the definition of the <code>Renderer2D</code> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Renderer2D</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="nc">Primitive</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="n">Triangles</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="n">TriangleStrip</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="n">TriangleFan</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="n">Lines</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="n">LineStrip</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="n">LineLoop</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="n">Points</span><span class="p">,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="n">Quads</span><span class="w"> </span><span class="c1">// emulated: expanded to Triangles on flush</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Renderer2D</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">instance</span><span class="p">();</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="cm">/** Releases GL resources. Call with the owning context current. */</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroy</span><span class="p">();</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="c1">// --- projection / transform (replaces the fixed-function matrix stack) ---</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">    </span><span class="cm">/** Sets the projection, equivalent to gluOrtho2D(l, r, b, t). */</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setOrtho</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">t</span><span class="p">);</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setProjection</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Mat4</span><span class="w"> </span><span class="o">&amp;</span><span class="n">projection</span><span class="p">);</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">loadIdentity</span><span class="p">();</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">pushTransform</span><span class="p">();</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">popTransform</span><span class="p">();</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">translate</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">rotateZ</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">degrees</span><span class="p">);</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">sy</span><span class="p">);</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a><span class="w">    </span><span class="cm">/** Resets the transform stack to a single identity (call once per frame). */</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">resetTransform</span><span class="p">();</span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a><span class="w">    </span><span class="c1">// --- GL state helpers so callers need no direct GL/Qt dependency ---</span>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setViewport</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setScissor</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setScissorEnabled</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">enable</span><span class="p">);</span>
+<a id="__codelineno-6-40" name="__codelineno-6-40" href="#__codelineno-6-40"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="p">);</span>
+<a id="__codelineno-6-41" name="__codelineno-6-41" href="#__codelineno-6-41"></a>
+<a id="__codelineno-6-42" name="__codelineno-6-42" href="#__codelineno-6-42"></a><span class="w">    </span><span class="c1">// --- immediate-mode-style batching ---</span>
+<a id="__codelineno-6-43" name="__codelineno-6-43" href="#__codelineno-6-43"></a>
+<a id="__codelineno-6-44" name="__codelineno-6-44" href="#__codelineno-6-44"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">begin</span><span class="p">(</span><span class="n">Primitive</span><span class="w"> </span><span class="n">primitive</span><span class="p">);</span>
+<a id="__codelineno-6-45" name="__codelineno-6-45" href="#__codelineno-6-45"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginQuads</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">begin</span><span class="p">(</span><span class="n">Quads</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-6-46" name="__codelineno-6-46" href="#__codelineno-6-46"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginTriangles</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">begin</span><span class="p">(</span><span class="n">Triangles</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-6-47" name="__codelineno-6-47" href="#__codelineno-6-47"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginTriangleFan</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">begin</span><span class="p">(</span><span class="n">TriangleFan</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-6-48" name="__codelineno-6-48" href="#__codelineno-6-48"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginLines</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-6-49" name="__codelineno-6-49" href="#__codelineno-6-49"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginLineStrip</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-6-50" name="__codelineno-6-50" href="#__codelineno-6-50"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginLineLoop</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-6-51" name="__codelineno-6-51" href="#__codelineno-6-51"></a>
+<a id="__codelineno-6-52" name="__codelineno-6-52" href="#__codelineno-6-52"></a><span class="w">    </span><span class="cm">/**</span>
+<a id="__codelineno-6-53" name="__codelineno-6-53" href="#__codelineno-6-53"></a><span class="cm">     * Dashed GL_LINES batch, replacing glLineStipple. The dash distance is</span>
+<a id="__codelineno-6-54" name="__codelineno-6-54" href="#__codelineno-6-54"></a><span class="cm">     * computed automatically per segment (pixels on / off = periodPixels/2),</span>
+<a id="__codelineno-6-55" name="__codelineno-6-55" href="#__codelineno-6-55"></a><span class="cm">     * so callers just emit vertex pairs as with beginLines().</span>
+<a id="__codelineno-6-56" name="__codelineno-6-56" href="#__codelineno-6-56"></a><span class="cm">     */</span>
+<a id="__codelineno-6-57" name="__codelineno-6-57" href="#__codelineno-6-57"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">beginDashedLines</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">periodPixels</span><span class="p">);</span>
+<a id="__codelineno-6-58" name="__codelineno-6-58" href="#__codelineno-6-58"></a>
+<a id="__codelineno-6-59" name="__codelineno-6-59" href="#__codelineno-6-59"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">color</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span>
+<a id="__codelineno-6-60" name="__codelineno-6-60" href="#__codelineno-6-60"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">color3fv</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">rgb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">color</span><span class="p">(</span><span class="n">rgb</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">rgb</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">rgb</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-6-61" name="__codelineno-6-61" href="#__codelineno-6-61"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">texCoord</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">v</span><span class="p">);</span>
+<a id="__codelineno-6-62" name="__codelineno-6-62" href="#__codelineno-6-62"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">vertex</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<a id="__codelineno-6-63" name="__codelineno-6-63" href="#__codelineno-6-63"></a>
+<a id="__codelineno-6-64" name="__codelineno-6-64" href="#__codelineno-6-64"></a><span class="w">    </span><span class="cm">/** Flushes the accumulated primitive as a single draw call. */</span>
+<a id="__codelineno-6-65" name="__codelineno-6-65" href="#__codelineno-6-65"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">end</span><span class="p">();</span>
+</code></pre></div>
+<p>In the following example shows how the fixed function OpenGL code is replaced with the new <code>Renderer2D</code> class:</p>
+<div class="grid">
+<div>
+<p><strong>Legacy OpenGL</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">glBegin</span><span class="p">(</span><span class="n">GL_QUADS</span><span class="p">);</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">glColor3fv</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">glVertex2i</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">...</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">glEnd</span><span class="p">();</span>
+</code></pre></div>
+</div>
+<div>
+<p><strong>Renderer2D</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Renderer2D</span><span class="o">::</span><span class="n">instance</span><span class="p">();</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">r</span><span class="p">.</span><span class="n">beginQuads</span><span class="p">();</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">r</span><span class="p">.</span><span class="n">color</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span><span class="w"> </span><span class="n">cg</span><span class="p">,</span><span class="w"> </span><span class="n">cb</span><span class="p">);</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">r</span><span class="p">.</span><span class="n">vertex</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">...</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">r</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+</code></pre></div>
+</div>
+</div>
+<p>Using this approach Claude Code could automatically replace the legacy OpenGL code with the new <code>Renderer2D</code> class. If a OpenGL construct was found that was not in the class it was added. The following code shows an example of how the legacy OpenGL code is replaced with the new <code>Renderer2D</code> class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">Line::doGeometry</span><span class="p">()</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">Renderer2D</span><span class="w"> </span><span class="o">&amp;</span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Renderer2D</span><span class="o">::</span><span class="n">instance</span><span class="p">();</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">beginQuads</span><span class="p">();</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">vertex</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p1</span><span class="p">.</span><span class="n">getX</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p1</span><span class="p">.</span><span class="n">getY</span><span class="p">());</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">vertex</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p2</span><span class="p">.</span><span class="n">getX</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p2</span><span class="p">.</span><span class="n">getY</span><span class="p">());</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">vertex</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p3</span><span class="p">.</span><span class="n">getX</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p3</span><span class="p">.</span><span class="n">getY</span><span class="p">());</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">vertex</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p4</span><span class="p">.</span><span class="n">getX</span><span class="p">(),</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">m_p4</span><span class="p">.</span><span class="n">getY</span><span class="p">());</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="a-new-shader-based-rendering-layer">A new shader based rendering layer</h3>
+<p>To support the <code>Renderer2D</code> class a new shader based rendering layer was implemented. The rendering layer is implemented in the <code>ivf2d</code> library. The rendering layer is responsible for managing the OpenGL context and the shaders as shown below:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">GLProgram</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">public</span><span class="o">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="n">GLProgram</span><span class="p">();</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="o">~</span><span class="n">GLProgram</span><span class="p">();</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="cm">/** Compiles + links the given sources (no &quot;#version&quot; line). Returns success. */</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">compile</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vertexSource</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">fragmentSource</span><span class="p">);</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="cm">/** Makes this program current. */</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">use</span><span class="p">();</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="cm">/** Deletes GL resources. Safe to call with no live GL context (no-op). */</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">destroy</span><span class="p">();</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isValid</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_program</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">id</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_program</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">uniformLocation</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">);</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">attribLocation</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">);</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setMat4</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Mat4</span><span class="w"> </span><span class="o">&amp;</span><span class="n">matrix</span><span class="p">);</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setInt</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setFloat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setVec4</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">a</span><span class="p">);</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="cm">/**</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="cm">     * Returns the version + precision header for the current GL context:</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="cm">     *   desktop -&gt; &quot;#version 330 core\n&quot;</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="cm">     *   GLES / WebGL 2 -&gt; &quot;#version 300 es\nprecision highp float;\n&quot;</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="cm">     */</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">glslHeader</span><span class="p">();</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="k">private</span><span class="o">:</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">QOpenGLExtraFunctions</span><span class="w"> </span><span class="o">*</span><span class="n">gl</span><span class="p">();</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">compileStage</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="o">&amp;</span><span class="n">source</span><span class="p">);</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">m_program</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="p">};</span>
+</code></pre></div>
+<p>It is a very light weight class that manages the OpenGL context and the shaders. The class is used by the <code>Renderer2D</code> class to manage the shaders and the OpenGL context. </p>
+<p>As the modern OpenGL implementations don't support the fixed function pipeline the rendering layer is implemented using shaders. The following code shows the very simple vertex and fragment shaders used in the rendering layer:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kr">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">char</span><span class="w"> </span><span class="o">*</span><span class="n">kVertexShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="err">&quot;</span><span class="n">GLSL</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec2</span><span class="w"> </span><span class="n">aPos</span><span class="p">;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">aColor</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">layout</span><span class="p">(</span><span class="n">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">vec2</span><span class="w"> </span><span class="n">aTex</span><span class="p">;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">mat4</span><span class="w"> </span><span class="n">uMVP</span><span class="p">;</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="k">out</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">vColor</span><span class="p">;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="k">out</span><span class="w"> </span><span class="kt">vec2</span><span class="w"> </span><span class="n">vTex</span><span class="p">;</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="p">{</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="n">vColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aColor</span><span class="p">;</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">    </span><span class="n">vTex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">aTex</span><span class="p">;</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">    </span><span class="nb">gl_Position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uMVP</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kt">vec4</span><span class="p">(</span><span class="n">aPos</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p">);</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="p">}</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="p">)</span><span class="n">GLSL</span><span class="err">&quot;</span><span class="p">;</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="kr">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">char</span><span class="w"> </span><span class="o">*</span><span class="n">kFragmentShader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">R</span><span class="err">&quot;</span><span class="n">GLSL</span><span class="p">(</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="k">in</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">vColor</span><span class="p">;</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="k">in</span><span class="w"> </span><span class="kt">vec2</span><span class="w"> </span><span class="n">vTex</span><span class="p">;</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">uUseTexture</span><span class="p">;</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">uForceOpaque</span><span class="p">;</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">uDiscardWhite</span><span class="p">;</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">uDashed</span><span class="p">;</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">uDashPeriod</span><span class="p">;</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="k">uniform</span><span class="w"> </span><span class="kt">sampler2D</span><span class="w"> </span><span class="n">uTex</span><span class="p">;</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="k">out</span><span class="w"> </span><span class="kt">vec4</span><span class="w"> </span><span class="n">fragColor</span><span class="p">;</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">()</span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a><span class="p">{</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a><span class="w">    </span><span class="c1">// For dashed lines vTex.x carries the along-segment distance in pixels.</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uDashed</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">fract</span><span class="p">(</span><span class="n">vTex</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">uDashPeriod</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a><span class="w">        </span><span class="k">discard</span><span class="p">;</span>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a><span class="w">    </span><span class="kt">vec4</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vColor</span><span class="p">;</span>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uUseTexture</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a><span class="w">        </span><span class="kt">vec4</span><span class="w"> </span><span class="n">texel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">texture</span><span class="p">(</span><span class="n">uTex</span><span class="p">,</span><span class="w"> </span><span class="n">vTex</span><span class="p">);</span>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a><span class="w">        </span><span class="c1">// Colour key: drop pure white (all channels 255) so the texture stamps</span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a><span class="w">        </span><span class="c1">// as a cut-out. Half a quantisation step of slack covers filtering.</span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uDiscardWhite</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">all</span><span class="p">(</span><span class="n">greaterThanEqual</span><span class="p">(</span><span class="n">texel</span><span class="p">.</span><span class="n">rgb</span><span class="p">,</span><span class="w"> </span><span class="kt">vec3</span><span class="p">(</span><span class="mf">254.5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">255.0</span><span class="p">))))</span>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a><span class="w">            </span><span class="k">discard</span><span class="p">;</span>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a><span class="w">        </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">texel</span><span class="p">;</span>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">uForceOpaque</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a><span class="w">        </span><span class="n">c</span><span class="p">.</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a><span class="w">    </span><span class="n">fragColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a><span class="p">}</span>
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a><span class="p">)</span><span class="n">GLSL</span><span class="err">&quot;</span><span class="p">;</span>
+</code></pre></div>
+<h2 id="what-this-migration-taught-me">What this migration taught me</h2>
+<p>The biggest lesson from this work is that modernization is often less about replacing everything at once and more about finding the right seams. The core application model was still useful, but the old user interface and rendering stack were holding it back. By isolating those parts, it became possible to modernize without losing the ideas that had made the original application valuable.</p>
+<p>It also helped to think in terms of compatibility rather than purity. Keeping the legacy and new versions available in parallel gave me a safety net. It meant I could verify behavior incrementally, compare results, and gradually move the application without losing momentum.</p>
+<p>This kind of migration is probably easier when the software has a clear architectural boundary. In my case, the abstraction around the paint view and the rendering layer became the hinge points that made the transition work.</p>
+<h2 id="modern-opengl-and-webassembly-a-new-possibility">Modern OpenGL and WebAssembly - A new possibility</h2>
+<p>An interesting side effect of this modernization is that it opened the door to new platforms. With the legacy OpenGL code replaced by a shader-based approach, it became feasible to target WebAssembly and WebGL. This means that you can run ForcePAD in a web browser, making it accessible to a wider audience without requiring installation or specific operating systems. We have seen in later years that IT-departments are often reluctant to install software on their systems. This is especially true for research and teaching environments where users may not have administrative privileges. By targeting WebAssembly, ForcePAD can now be used in a browser, making it much easier to deploy and use in educational settings. It is also possible to make it load models directly from URLs and provide students with direct links to examples.</p>
+<p>As Qt supports WebAssembly and we have an updated renderer that is compatible with WebGL, the path to a browser-based version of ForcePAD became clear. To implement it fully I asked Claude Code to add a wasm target to the build system and to make sure that the application could be compiled to WebAssembly. This was a significant step, but it was made much easier by the groundwork laid in the modernization process.</p>
+<p>The result of this work can be found at the ForcePAD web pages here: </p>
+<p><a href="https://jonaslindemann.github.io/forcepad/">https://jonaslindemann.github.io/forcepad/</a>. </p>
+<p>At the site you can run the application directly in your browser, explore the new user interface, and see how the modernization has made it more accessible and maintainable. You can of course also download the application for Windows and macOS if you prefer to run it natively. The source code is available on GitHub, and the project is open for contributions and further improvements.</p>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; Jonas Lindemann
+    </div>
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+      
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/jonas_lindemann" target="_blank" rel="noopener me" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M433 179.1c0-97.2-63.7-125.7-63.7-125.7-62.5-28.7-228.6-28.4-290.5 0 0 0-63.7 28.5-63.7 125.7 0 115.7-6.6 259.4 105.6 289.1 40.5 10.7 75.3 13 103.3 11.4 50.8-2.8 79.3-18.1 79.3-18.1l-1.7-36.9s-36.3 11.4-77.1 10.1c-40.4-1.4-83-4.4-89.6-54-.6-4.6-.9-9.3-.9-13.9 85.6 20.9 158.7 9.1 178.7 6.7 56.1-6.7 105-41.3 111.2-72.9 9.8-49.8 9-121.5 9-121.5zm-75.1 125.2h-46.6V190.1c0-49.7-64-51.6-64 6.9v62.5H201V197c0-58.5-64-56.6-64-6.9v114.2H90.3c0-122.1-5.2-147.9 18.4-175 25.9-28.9 79.8-30.8 103.8 6.1l11.6 19.5 11.6-19.5c24.1-37.1 78.1-34.8 103.8-6.1 23.7 27.3 18.4 53 18.4 175"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/jonas-lindemann-8632343/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/jonaslindemann" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.youtube.com/@JonasLindemann" target="_blank" rel="noopener" title="www.youtube.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../../..","features":["header.autohide","navigation.instant","navigation.tabs","navigation.tabs.sticky","navigation.top","navigation.tracking","search.highlight"],"search":"../../../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.69c251d7.min.js"></script>
+      
+    
+  </body>
+</html>
