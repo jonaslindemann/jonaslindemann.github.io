@@ -4,6 +4,20 @@ Latest posts from my work on mechanics applications, graphics, tooling, packagin
 
 <article class="blog-excerpt" markdown="1">
 
+## [Creative coding with C++ in the age of AI](posts/creative_coding_cpp_ai.md)
+
+<p class="blog-meta">November 18, 2026 · C++, Creative Coding, Graphics, AI</p>
+
+![](posts/images/creative_coding_ai.png)
+
+After exploring creative coding in C++ with libCinder, openFrameworks and Raylib, I have started extending my own graphics library, ivf2, into my go-to tool for creative work, something AI coding assistants have made possible. This post describes the workflow behind my latest demo, Heaven.
+
+[Continue reading](posts/creative_coding_cpp_ai.md){ .blog-read-more }
+
+</article>
+
+<article class="blog-excerpt" markdown="1">
+
 ## [ForcePAD from Legacy to Modern](posts/forcepad_from_old_to_new.md)
 
 <p class="blog-meta">July 28, 2026 · OpenGL, C++, ForcePAD, Graphics, AI</p>
@@ -13,6 +27,8 @@ Latest posts from my work on mechanics applications, graphics, tooling, packagin
 This blog post describes my journey of modernizing the ForcePAD application, which was originally developed in the early 2000s using C++ and the FLTK library for the user interface, along with OpenGL for graphics. The post details the challenges faced in updating the application to be compatible with modern platforms and technologies, including replacing FLTK with a modern GUI framework, modernizing the application code, and transitioning from legacy OpenGL to a programmable pipeline.
 
 [Continue reading](posts/forcepad_from_old_to_new.md){ .blog-read-more }
+
+</article>
 
 <article class="blog-excerpt" markdown="1">
 
