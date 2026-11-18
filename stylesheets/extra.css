@@ -1,0 +1,51 @@
+/* Extra spacing between list items */
+
+
+/*
+body {
+    background-color: grey; 
+}
+*/
+
+.md-typeset ul, ol {
+    margin-top: 1em; /* Space before the list */
+    margin-bottom: 1em; /* Space after the list */
+    padding-left: 1.5em; /* Indent list items */
+}
+
+.md-typeset ul li, ol li {
+    margin-bottom: 0.0em; /* Space between list items */
+}
+
+.blog-excerpt {
+    margin: 1.8rem 0 2.8rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.blog-excerpt:last-child {
+    border-bottom: 0;
+}
+
+.blog-excerpt h2 {
+    margin-bottom: 0.25rem;
+}
+
+.blog-meta {
+    margin: 0 0 0.9rem;
+    color: var(--md-default-fg-color--light);
+    font-size: 0.68rem;
+}
+
+.blog-excerpt img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0.8rem 0 1rem;
+}
+
+.blog-read-more {
+    display: inline-block;
+    margin-top: 0.3rem;
+    font-weight: 700;
+}
